@@ -1,5 +1,5 @@
 <template>
-  <app-navbar></app-navbar>
+  <navbar></navbar>
   <!-- Introduction -->
   <section class="mb-8 py-20 text-white text-center relative">
     <div
@@ -268,14 +268,15 @@
     </div>
   </div>
 
-  <app-auth></app-auth>
+  <auth></auth>
 </template>
 
 <script>
-import AppNavbar from "@/components/AppNavbar.vue";
-import AppAuth from "@/components/AppAuth.vue";
+import Navbar from "@/components/Navbar.vue";
+import Auth from "@/components/Auth.vue";
+
 export default {
-  components: { AppNavbar, AppAuth },
+  components: { Navbar, Auth },
   name: "App",
 };
 </script>
