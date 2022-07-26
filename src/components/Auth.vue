@@ -213,9 +213,9 @@ export default {
         email: "required|min:3|max:100|email",
         age: "required|minValue:18|maxValue:120",
         password: "required|min:9|max:100|excluded:password",
-        confirm_password: "confirmed:@password",
-        country: "required|excluded:Moon",
-        tos: "required",
+        confirm_password: "password_mismatch:@password",
+        country: "required|country_excluded:Moon",
+        tos: "tos",
       },
       userData: {
         country: "Canada",
