@@ -91,6 +91,13 @@
           </form>
 
           <!-- Registration Form -->
+          <div
+            class="text-white text-center font-bold p-4 rounded mb-4"
+            v-if="alert.show"
+            :class="alert.color"
+          >
+            {{ alert.text }}
+          </div>
           <vee-form
             v-show="tab === 'register'"
             :validation-schema="schema"
@@ -189,6 +196,7 @@
             <button
               type="submit"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
+              :disabled="submitting"
             >
               Submit
             </button>
@@ -220,6 +228,12 @@ export default {
       userData: {
         country: "Canada",
       },
+      submitting: false,
+      alert: {
+        show: false,
+        color: "bg-blue-500",
+        text: "Your account is being created, please wait.",
+      },
     };
   },
   computed: {
@@ -230,6 +244,13 @@ export default {
   },
   methods: {
     register(values) {
+      this.alert.show = true;
+      this.submitting = true;
+      this.alert.color = "bg-blue-500";
+      this.alert.text = "Your account is being created, please wait.";
+
+      this.alert.color = "bg-green-500";
+      this.alert.text = "Account created.";
       console.log(values);
     },
   },
