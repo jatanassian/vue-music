@@ -1,5 +1,5 @@
 <template>
-  <!-- Registration Form -->
+  <!-- Alert -->
   <div
     class="text-white text-center font-bold p-4 rounded mb-4"
     v-if="alert.show"
@@ -7,6 +7,8 @@
   >
     {{ alert.text }}
   </div>
+
+  <!-- Registration Form -->
   <vee-form
     :validation-schema="schema"
     :initial-values="userData"
@@ -97,10 +99,11 @@
       <label class="inline-block">Accept terms of service</label>
       <ErrorMessage class="text-red-600 block" name="tos" />
     </div>
+    <!-- Submit Button -->
     <button
       type="submit"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
-      :disabled="submitting"
+      :disabled="loading"
     >
       Submit
     </button>
@@ -124,7 +127,7 @@ export default {
       userData: {
         country: "Canada",
       },
-      submitting: false,
+      loading: false,
       alert: {
         show: false,
         color: "bg-blue-500",
@@ -134,8 +137,8 @@ export default {
   },
   methods: {
     register(values) {
+      this.loading = true;
       this.alert.show = true;
-      this.submitting = true;
       this.alert.color = "bg-blue-500";
       this.alert.text = "Your account is being created, please wait.";
 
