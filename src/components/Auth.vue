@@ -94,6 +94,7 @@
           <vee-form
             v-show="tab === 'register'"
             :validation-schema="schema"
+            :initial-values="userData"
             @submit="register"
           >
             <!-- Name -->
@@ -215,6 +216,9 @@ export default {
         confirm_password: "confirmed:@password",
         country: "required|excluded:Moon",
         tos: "required",
+      },
+      userData: {
+        country: "Canada",
       },
     };
   },
