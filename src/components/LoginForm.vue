@@ -83,6 +83,8 @@ export default {
 
       this.alert.color = "bg-green-500";
       this.alert.text = "You are now logged in.";
+
+      window.location.reload();
     },
   },
 };

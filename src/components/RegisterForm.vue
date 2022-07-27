@@ -158,6 +158,8 @@ export default {
 
       this.alert.color = "bg-green-500";
       this.alert.text = "Account created.";
+
+      window.location.reload();
     },
   },
 };
