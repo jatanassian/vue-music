@@ -111,6 +111,8 @@
 </template>
 
 <script>
+import firebase from "@/includes/firebase";
+
 export default {
   name: "RegisterForm",
   data() {
@@ -136,15 +138,29 @@ export default {
     };
   },
   methods: {
-    register(values) {
+    async register(values) {
       this.loading = true;
       this.alert.show = true;
       this.alert.color = "bg-blue-500";
       this.alert.text = "Your account is being created, please wait.";
 
+      let userCred = null;
+      try {
+        userCred = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(values.email, values.password);
+      } catch (error) {
+        this.loading = false;
+        this.alert.color = "bg-red-500";
+        this.alert.text =
+          "An unexpected error occured. Please try again later.";
+        console.log(error);
+        return;
+      }
+
       this.alert.color = "bg-green-500";
       this.alert.text = "Account created.";
-      console.log(values);
+      console.log(userCred);
     },
   },
 };
