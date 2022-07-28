@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import { storage } from "@/includes/firebase";
+
 export default {
   name: "Upload",
   data() {
@@ -72,7 +74,9 @@ export default {
           return;
         }
 
-        console.log(file);
+        const storageRef = storage.ref();
+        const songsRef = storageRef.child(`songs/${file.name}`);
+        songsRef.put(file);
       });
     },
   },
