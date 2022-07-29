@@ -23,11 +23,14 @@
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
         <!-- File Name -->
-        <div class="font-bold text-sm">{{ upload.name }}</div>
+        <div class="font-bold text-sm" :class="upload.textClass">
+          <i :class="upload.icon"></i> {{ upload.name }}
+        </div>
         <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
           <!-- Inner Progress Bar -->
           <div
-            class="transition-all progress-bar bg-blue-400"
+            class="transition-all progress-bar"
+            :class="upload.color"
             :style="{ width: upload.currentProgress + '%' }"
           ></div>
         </div>
@@ -65,14 +68,33 @@ export default {
           uploadingFile,
           currentProgress: 0,
           name: file.name,
+          color: "bg-blue-400",
+          icon: "fas fa-spinner fa-spin",
+          textClass: "",
         });
 
-        uploadingFile.on("state_changed", (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        uploadingFile.on(
+          "state_changed",
+          // During upload
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-          this.uploads[uploadsLength - 1].currentProgress = progress;
-        });
+            this.uploads[uploadsLength - 1].currentProgress = progress;
+          },
+          // Upload failed
+          () => {
+            this.uploads[uploadsLength - 1].color = "bg-red-400";
+            this.uploads[uploadsLength - 1].icon = "fas fa-times";
+            this.uploads[uploadsLength - 1].textClass = "text-red-400";
+          },
+          // Upload succeeded
+          () => {
+            this.uploads[uploadsLength - 1].color = "bg-green-400";
+            this.uploads[uploadsLength - 1].icon = "fas fa-check";
+            this.uploads[uploadsLength - 1].textClass = "text-green-400";
+          }
+        );
       });
     },
   },
