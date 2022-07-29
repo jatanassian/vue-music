@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { storage } from "@/includes/firebase";
+import { storage, auth, songsCollection } from "@/includes/firebase";
 
 export default {
   name: "Upload",
@@ -51,6 +51,7 @@ export default {
     };
   },
   methods: {
+    // Upload file to Firebase storage and add sond data to Firestore
     upload(event) {
       this.isDragOver = false;
       const files = [...event.dataTransfer.files];
@@ -89,7 +90,20 @@ export default {
             this.uploads[uploadsLength - 1].textClass = "text-red-400";
           },
           // Upload succeeded
-          () => {
+          async () => {
+            const song = {
+              uid: auth.currentUser.uid,
+              display_name: auth.currentUser.displayName,
+              original_name: uploadingFile.snapshot.ref.name,
+              modified_name: uploadingFile.snapshot.ref.name,
+              genre: "",
+              comments_count: "",
+            };
+
+            song.url = await uploadingFile.snapshot.ref.getDownloadURL();
+
+            await songsCollection.add(song);
+
             this.uploads[uploadsLength - 1].color = "bg-green-400";
             this.uploads[uploadsLength - 1].icon = "fas fa-check";
             this.uploads[uploadsLength - 1].textClass = "text-green-400";
