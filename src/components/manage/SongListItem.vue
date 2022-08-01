@@ -11,7 +11,7 @@
       </button>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right"
-        @click="editable = true"
+        @click.prevent="editable = true"
       >
         <i class="fa fa-pencil-alt"></i>
       </button>
@@ -38,6 +38,7 @@
             name="modified_name"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            @input="updateUnsavedEdit(true)"
           />
           <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
@@ -48,6 +49,7 @@
             name="genre"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
+            @input="updateUnsavedEdit(true)"
           />
           <ErrorMessage class="text-red-600" name="genre" />
         </div>
@@ -72,6 +74,7 @@
 </template>
 
 <script>
+// TODO: Make go back btn put values back to initial values
 import { songsCollection, storage } from "@/includes/firebase";
 
 export default {
@@ -86,6 +89,10 @@ export default {
       required: true,
     },
     updateSong: {
+      type: Function,
+      required: true,
+    },
+    updateUnsavedEdit: {
       type: Function,
       required: true,
     },
@@ -121,6 +128,7 @@ export default {
         this.alert.text = "Something went wrong, please try again.";
       }
       this.updateSong(this.index, values);
+      this.updateUnsavedEdit(false);
 
       this.loading = false;
       this.alert.color = "bg-green-500";

@@ -22,6 +22,7 @@
               :song="song"
               :index="i"
               :update-song="updateSong"
+              :update-unsaved-edit="updateUnsavedEdit"
             ></song-list-item>
           </div>
         </div>
@@ -41,6 +42,7 @@ export default {
   data() {
     return {
       songs: [],
+      unsavedEdit: false,
     };
   },
   methods: {
@@ -68,9 +70,23 @@ export default {
         this.songs.splice(index, 1);
       }
     },
+    updateUnsavedEdit(value) {
+      this.unsavedEdit = value;
+    },
   },
   created() {
     this.getSongs();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.unsavedEdit) {
+      next();
+    } else {
+      // TODO: Confirm not showing up if I edit song A (not saved) and then edit and save song B => unsavedEdit gets overwritten => make it an object for every song and if one of the object's prop has true value then show confirm?
+      const leaveConfirmed = confirm(
+        "You have unsaved changes. Are you sure you want to leave the page?"
+      );
+      next(leaveConfirmed);
+    }
   },
 };
 </script>
