@@ -25,6 +25,7 @@ export default {
 
     defineRule("required", required);
     defineRule("tos", required);
+    defineRule("songTitle", required);
     defineRule("min", min);
     defineRule("max", max);
     defineRule("alphaSpaces", alphaSpaces);
@@ -41,15 +42,16 @@ export default {
           required: `The field ${ctx.field} is required.`,
           min: `The field ${ctx.field} is too short.`,
           max: `The field ${ctx.field} is too long.`,
-          alpha_spaces: `The field ${ctx.field} may only contain characters and spaces.`,
+          alphaSpaces: `The field ${ctx.field} may only contain characters and spaces.`,
           email: `The field ${ctx.field} must be a valid email.`,
-          min_value: `The field ${ctx.field} is too high.`,
-          max_value: `The field ${ctx.field} it too low.`,
+          minValue: `The field ${ctx.field} is too high.`,
+          maxValue: `The field ${ctx.field} it too low.`,
           excluded: `You are not allowed to use this value for the field ${ctx.field}.`,
           country_excluded:
             "Due to restrictions, we do not accept users from this location.",
           password_mismatch: "The passwords don't match.",
           tos: "You must accept the Terms of Service.",
+          songTitle: "The song title is required.",
         };
 
         const message = messages[ctx.rule.name]
