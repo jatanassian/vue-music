@@ -1,9 +1,11 @@
 <template>
   <div class="bg-white rounded border border-gray-200 relative flex flex-col">
+    <!-- Header -->
     <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
       <span class="card-title">Upload</span>
       <i class="fas fa-upload float-right text-green-400 text-2xl"></i>
     </div>
+
     <div class="p-6">
       <!-- Upload Dropbox -->
       <div
@@ -19,8 +21,12 @@
       >
         <h5>Drop your files here</h5>
       </div>
+
+      <!-- Upload Button -->
       <input type="file" multiple @change="upload($event)" />
+
       <hr class="my-6" />
+
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
         <!-- File Name -->
@@ -115,6 +121,16 @@ export default {
         );
       });
     },
+    // Cancel ongoing uploads
+    cancelUploads() {
+      this.uploads.forEach((upload) => {
+        upload.uploadingFile.cancel();
+      });
+    },
+  },
+  // Cancel uploads before leaving the page
+  beforeUnmount() {
+    this.cancelUploads();
   },
 };
 </script>
