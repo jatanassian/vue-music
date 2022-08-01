@@ -5,6 +5,7 @@
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        @click.prevent="deleteSong"
       >
         <i class="fa fa-times"></i>
       </button>
@@ -71,7 +72,7 @@
 </template>
 
 <script>
-import { songsCollection } from "@/includes/firebase";
+import { songsCollection, storage } from "@/includes/firebase";
 
 export default {
   name: "SongListItem",
@@ -105,6 +106,7 @@ export default {
     };
   },
   methods: {
+    // Edit song in Firestore and component data
     async edit(values) {
       this.loading = true;
 
@@ -123,6 +125,14 @@ export default {
       this.loading = false;
       this.alert.color = "bg-green-500";
       this.alert.text = "Song successfully updated.";
+    },
+    // Remove song from Firebase storage, Firestore database and component data
+    async deleteSong() {
+      const storageRef = storage.ref();
+      const songRef = storageRef.child(`songs/${this.song.original_name}`);
+      await songRef.delete();
+      await songsCollection.doc(this.song.id).delete();
+      this.updateSong(this.index, null);
     },
   },
 };

@@ -57,9 +57,14 @@ export default {
         this.songs.push(song);
       });
     },
+    // Edit or delete a song in the list
     updateSong(index, newSong) {
-      this.songs[index].modified_name = newSong.modified_name;
-      this.songs[index].genre = newSong.genre;
+      if (newSong) {
+        this.songs[index].genre = newSong.genre;
+        this.songs[index].modified_name = newSong.modified_name;
+      } else {
+        this.songs.splice(index, 1);
+      }
     },
   },
   created() {
