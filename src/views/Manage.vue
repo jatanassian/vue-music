@@ -17,9 +17,11 @@
           </div>
           <div class="p-6">
             <song-list-item
-              v-for="song in songs"
+              v-for="(song, i) in songs"
               :key="song.id"
               :song="song"
+              :index="i"
+              :update-song="updateSong"
             ></song-list-item>
           </div>
         </div>
@@ -54,6 +56,11 @@ export default {
         };
         this.songs.push(song);
       });
+    },
+    updateSong(index, newSong) {
+      console.log("newSong ->", newSong);
+      this.songs[index].modified_name = newSong.modified_name;
+      this.songs[index].genre = newSong.genre;
     },
   },
   created() {

@@ -18,6 +18,13 @@
 
     <!-- Song Edit Form -->
     <div v-show="editable">
+      <div
+        v-if="alert.show"
+        class="text-white text-center font-bold p-4 mb-4"
+        :class="alert.color"
+      >
+        {{ alert.text }}
+      </div>
       <vee-form
         :validation-schema="schema"
         :initial-values="song"
@@ -46,6 +53,7 @@
         <button
           type="submit"
           class="py-1.5 px-3 rounded text-white bg-green-600"
+          :disabled="loading"
         >
           Submit
         </button>
@@ -53,6 +61,7 @@
           type="button"
           class="py-1.5 px-3 rounded text-white bg-gray-600"
           @click.prevent="editable = false"
+          :disabled="loading"
         >
           Go Back
         </button>
@@ -62,11 +71,21 @@
 </template>
 
 <script>
+import { songsCollection } from "@/includes/firebase";
+
 export default {
   name: "SongListItem",
   props: {
     song: {
       type: Object,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+    updateSong: {
+      type: Function,
       required: true,
     },
   },
@@ -77,11 +96,33 @@ export default {
         modified_name: "songTitle",
         genre: "alphaSpaces",
       },
+      loading: false,
+      alert: {
+        show: false,
+        color: "bg-blue-500",
+        text: "Updating song info, please wait.",
+      },
     };
   },
   methods: {
-    edit() {
-      console.log("song edited");
+    async edit(values) {
+      this.loading = true;
+
+      this.alert.show = true;
+      this.alert.color = "bg-blue-500";
+      this.alert.text = "Updating song info, please wait.";
+
+      try {
+        await songsCollection.doc(this.song.id).update(values);
+      } catch (error) {
+        this.alert.color = "bg-red-500";
+        this.alert.text = "Something went wrong, please try again.";
+      }
+      this.updateSong(this.index, values);
+
+      this.loading = false;
+      this.alert.color = "bg-green-500";
+      this.alert.text = "Song successfully updated.";
     },
   },
 };
