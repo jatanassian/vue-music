@@ -133,9 +133,33 @@
 
 <script>
 import Upload from "@/components/manage/Upload.vue";
+import { songsCollection, auth } from "@/includes/firebase";
 
 export default {
   name: "Manage",
   components: { Upload },
+  data() {
+    return {
+      songs: [],
+    };
+  },
+  methods: {
+    // Fetch user's songs in Firebase
+    async getSongs() {
+      const songsSnapshot = await songsCollection
+        .where("uid", "==", auth.currentUser.uid)
+        .get();
+      songsSnapshot.forEach((document) => {
+        const song = {
+          ...document.data(),
+          id: document.id,
+        };
+        this.songs.push(song);
+      });
+    },
+  },
+  created() {
+    this.getSongs();
+  },
 };
 </script>
