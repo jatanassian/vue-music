@@ -58,7 +58,6 @@ export default {
       });
     },
     updateSong(index, newSong) {
-      console.log("newSong ->", newSong);
       this.songs[index].modified_name = newSong.modified_name;
       this.songs[index].genre = newSong.genre;
     },
