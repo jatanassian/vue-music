@@ -3,7 +3,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <upload></upload>
+        <upload :add-song="addSong"></upload>
       </div>
       <div class="col-span-2">
         <div
@@ -49,19 +49,21 @@ export default {
       const songsSnapshot = await songsCollection
         .where("uid", "==", auth.currentUser.uid)
         .get();
-      songsSnapshot.forEach((document) => {
-        const song = {
-          ...document.data(),
-          id: document.id,
-        };
-        this.songs.push(song);
-      });
+      songsSnapshot.forEach(this.addSong);
+    },
+    // Add song to the songs list
+    addSong(document) {
+      const song = {
+        ...document.data(),
+        id: document.id,
+      };
+      this.songs.push(song);
     },
     // Edit or delete a song in the list
-    updateSong(index, newSong) {
-      if (newSong) {
-        this.songs[index].genre = newSong.genre;
-        this.songs[index].modified_name = newSong.modified_name;
+    updateSong(index, song) {
+      if (song) {
+        this.songs[index].genre = song.genre;
+        this.songs[index].modified_name = song.modified_name;
       } else {
         this.songs.splice(index, 1);
       }

@@ -23,7 +23,7 @@
       </div>
 
       <!-- Upload Button -->
-      <input type="file" multiple @change="upload($event)" />
+      <input type="file" multiple @change="uploadSong($event)" />
 
       <hr class="my-6" />
 
@@ -51,6 +51,12 @@ import { storage, auth, songsCollection } from "@/includes/firebase";
 
 export default {
   name: "Upload",
+  props: {
+    addSong: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       isDragOver: false,
@@ -59,7 +65,7 @@ export default {
   },
   methods: {
     // Upload file to Firebase storage and add sond data to Firestore
-    upload(event) {
+    uploadSong(event) {
       this.isDragOver = false;
 
       const files = event.dataTransfer
@@ -112,7 +118,9 @@ export default {
 
             song.url = await uploadingFile.snapshot.ref.getDownloadURL();
 
-            await songsCollection.add(song);
+            const songRef = await songsCollection.add(song);
+            const songSnapshot = await songRef.get();
+            this.addSong(songSnapshot);
 
             this.uploads[uploadsLength - 1].color = "bg-green-400";
             this.uploads[uploadsLength - 1].icon = "fas fa-check";
