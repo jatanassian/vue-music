@@ -53,11 +53,38 @@ export default {
   data() {
     return {
       songs: [],
+      songsPerPage: 3,
+      loading: false,
     };
+  },
+  computed: {
+    lastSongFromList() {
+      return this.songs[this.songs.length - 1];
+    },
   },
   methods: {
     async getSongs() {
-      const songsSnapshots = await songsCollection.get();
+      if (this.loading) return;
+
+      this.loading = true;
+
+      let songsSnapshots;
+      if (this.songs.length) {
+        const lastSongDoc = await songsCollection
+          .doc(this.lastSongFromList.id)
+          .get();
+
+        songsSnapshots = await songsCollection
+          .orderBy("modified_name")
+          .startAfter(lastSongDoc)
+          .limit(this.songsPerPage)
+          .get();
+      } else {
+        songsSnapshots = await songsCollection
+          .orderBy("modified_name")
+          .limit(this.songsPerPage)
+          .get();
+      }
 
       songsSnapshots.forEach((song) => {
         this.songs.push({
@@ -65,10 +92,24 @@ export default {
           id: song.id,
         });
       });
+      this.loading = false;
+    },
+    handleScroll() {
+      const { scrollTop, offsetHeight } = document.documentElement;
+
+      const isBottomOfWindow =
+        Math.round(scrollTop) + window.innerHeight === offsetHeight;
+
+      if (isBottomOfWindow) this.getSongs();
     },
   },
   created() {
     this.getSongs();
+
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeUmount() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
 };
 </script>
