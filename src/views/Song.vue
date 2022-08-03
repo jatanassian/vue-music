@@ -72,16 +72,19 @@
 
   <!-- Comments -->
   <ul class="container mx-auto">
-    <li class="p-6 bg-gray-50 border border-gray-200">
+    <li
+      v-for="comment in comments"
+      :key="comment.id"
+      class="p-6 bg-gray-50 border border-gray-200"
+    >
       <!-- Comment Author -->
       <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
+        <div class="font-bold">{{ comment.user_name }}</div>
+        <time>{{ comment.date }}</time>
       </div>
 
       <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium der doloremque laudantium.
+        {{ comment.text }}
       </p>
     </li>
   </ul>
@@ -97,6 +100,7 @@ export default {
   data() {
     return {
       song: {},
+      comments: [],
       schema: {
         comment: "required|min:3",
       },
@@ -119,6 +123,20 @@ export default {
       if (songSnapshot.exists) this.song = songSnapshot.data();
       else this.$router.push({ name: "home" });
     },
+    async getComments() {
+      this.comments = [];
+
+      const commentsSnapshot = await commentsCollection
+        .where("user_id", "==", auth.currentUser.uid)
+        .get();
+
+      commentsSnapshot.forEach((comment) => {
+        this.comments.push({
+          id: comment.id,
+          ...comment.data(),
+        });
+      });
+    },
     async addComment(values, context) {
       this.loading = true;
       this.alert.show = true;
@@ -128,11 +146,10 @@ export default {
       const comment = {
         text: values.comment,
         date: new Date().toString(),
-        songId: this.$route.params.id,
-        userName: auth.currentUser.displayName,
-        userId: auth.currentUser.uid,
+        song_id: this.$route.params.id,
+        user_name: auth.currentUser.displayName,
+        user_id: auth.currentUser.uid,
       };
-      console.log(comment);
 
       try {
         await commentsCollection.add(comment);
@@ -151,6 +168,7 @@ export default {
   },
   created() {
     this.getSong();
+    this.getComments();
   },
 };
 </script>
