@@ -61,10 +61,11 @@
         </vee-form>
         <!-- Sort Comments -->
         <select
+          v-model="sortSelection"
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         >
-          <option value="1">Latest</option>
-          <option value="2">Oldest</option>
+          <option value="new">Latest</option>
+          <option value="old">Oldest</option>
         </select>
       </div>
     </div>
@@ -73,7 +74,7 @@
   <!-- Comments -->
   <ul class="container mx-auto">
     <li
-      v-for="comment in comments"
+      v-for="comment in sortedComments"
       :key="comment.id"
       class="p-6 bg-gray-50 border border-gray-200"
     >
@@ -101,6 +102,7 @@ export default {
     return {
       song: {},
       comments: [],
+      sortSelection: "new",
       schema: {
         comment: "required|min:3",
       },
@@ -114,6 +116,16 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ["userLoggedIn"]),
+    sortedComments() {
+      const comments = [...this.comments];
+      return comments.sort((a, b) => {
+        if (this.sortSelection === "new") {
+          return new Date(b.date) - new Date(a.date);
+        } else {
+          return new Date(a.date) - new Date(b.date);
+        }
+      });
+    },
   },
   methods: {
     async getSong() {
@@ -159,6 +171,9 @@ export default {
         this.alert.text = "Something went wrong, please try again.";
         return;
       }
+
+      this.getComments();
+
       this.loading = false;
       this.alert.color = "bg-green-500";
       this.alert.text = "Comment added.";
