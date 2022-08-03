@@ -182,8 +182,22 @@ export default {
     },
   },
   created() {
+    const { sort } = this.$route.query;
+    this.sortSelection = sort === "new" || sort === "old" ? sort : "new";
+
     this.getSong();
     this.getComments();
+  },
+  watch: {
+    sortSelection(value) {
+      if (value === this.$route.query.sort) return;
+
+      this.$router.push({
+        query: {
+          sort: value,
+        },
+      });
+    },
   },
 };
 </script>
