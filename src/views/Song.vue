@@ -39,7 +39,11 @@
         >
           {{ alert.text }}
         </div>
-        <vee-form :validation-schema="schema" @submit="addComment">
+        <vee-form
+          v-if="userLoggedIn"
+          :validation-schema="schema"
+          @submit="addComment"
+        >
           <vee-field
             as="textarea"
             name="comment"
@@ -85,6 +89,8 @@
 
 <script>
 import { songsCollection, auth, commentsCollection } from "@/includes/firebase";
+import { mapState } from "pinia";
+import useUserStore from "@/stores/user";
 
 export default {
   name: "Song",
@@ -101,6 +107,9 @@ export default {
         text: "Submitting comment, please wait.",
       },
     };
+  },
+  computed: {
+    ...mapState(useUserStore, ["userLoggedIn"]),
   },
   methods: {
     async getSong() {
