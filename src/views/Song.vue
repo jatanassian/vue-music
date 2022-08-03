@@ -32,7 +32,14 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <vee-form :validation-schema="schema">
+        <div
+          v-if="alert.show"
+          class="text-white text-center font-bold p-4 mb-4"
+          :class="alert.color"
+        >
+          {{ alert.text }}
+        </div>
+        <vee-form :validation-schema="schema" @submit="addComment">
           <vee-field
             as="textarea"
             name="comment"
@@ -43,6 +50,7 @@
           <button
             type="submit"
             class="py-1.5 px-3 rounded text-white bg-green-600 block"
+            :disabled="loading"
           >
             Submit
           </button>
@@ -76,7 +84,7 @@
 </template>
 
 <script>
-import { songsCollection } from "@/includes/firebase";
+import { songsCollection, auth, commentsCollection } from "@/includes/firebase";
 
 export default {
   name: "Song",
@@ -85,6 +93,12 @@ export default {
       song: {},
       schema: {
         comment: "required|min:3",
+      },
+      loading: false,
+      alert: {
+        show: false,
+        color: "bg-blue-500",
+        text: "Submitting comment, please wait.",
       },
     };
   },
@@ -95,6 +109,35 @@ export default {
         .get();
       if (songSnapshot.exists) this.song = songSnapshot.data();
       else this.$router.push({ name: "home" });
+    },
+    async addComment(values, context) {
+      this.loading = true;
+      this.alert.show = true;
+      this.alert.color = "bg-blue-500";
+      this.alert.text = "Submitting comment, please wait.";
+
+      const comment = {
+        text: values.comment,
+        date: new Date().toString(),
+        songId: this.$route.params.id,
+        userName: auth.currentUser.displayName,
+        userId: auth.currentUser.uid,
+      };
+      console.log(comment);
+
+      try {
+        await commentsCollection.add(comment);
+      } catch (error) {
+        this.loading = false;
+        this.alert.color = "bg-red-500";
+        this.alert.text = "Something went wrong, please try again.";
+        return;
+      }
+      this.loading = false;
+      this.alert.color = "bg-green-500";
+      this.alert.text = "Comment added.";
+
+      context.resetForm();
     },
   },
   created() {
