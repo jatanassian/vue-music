@@ -113,7 +113,7 @@ export default {
               original_name: uploadingFile.snapshot.ref.name,
               modified_name: uploadingFile.snapshot.ref.name,
               genre: "",
-              comments_count: "",
+              comments_count: 0,
             };
 
             song.url = await uploadingFile.snapshot.ref.getDownloadURL();

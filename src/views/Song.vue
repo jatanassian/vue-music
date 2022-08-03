@@ -26,9 +26,7 @@
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
-        <span class="card-title"
-          >Comments ({{ song.comments_count || 0 }})</span
-        >
+        <span class="card-title">Comments ({{ song.comments_count }})</span>
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
@@ -173,6 +171,11 @@ export default {
       }
 
       this.getComments();
+
+      this.song.comments_count++;
+      await songsCollection.doc(this.$route.params.id).update({
+        comments_count: this.song.comments_count,
+      });
 
       this.loading = false;
       this.alert.color = "bg-green-500";
