@@ -1,12 +1,21 @@
 import { defineStore } from "pinia";
+import { Howl } from "howler";
 
 export default defineStore("song", {
   state: () => ({
     currentSong: {},
+    audio: {},
   }),
   actions: {
     async newSong(song) {
       this.currentSong = song;
+
+      this.audio = new Howl({
+        src: [song.url],
+        html5: true,
+      });
+
+      this.audio.play();
     },
   },
 });
