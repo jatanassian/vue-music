@@ -43,7 +43,19 @@ export default defineStore("song", {
 
       this.progress = `${(this.audio.seek() / this.audio.duration()) * 100}%`;
 
-      if (this.audio.playing) requestAnimationFrame(this.updateProgress);
+      if (this.audio.playing()) requestAnimationFrame(this.updateProgress);
+    },
+    updateSeek(event) {
+      if (!this.audio.playing) return;
+
+      const { x, width } = event.currentTarget.getBoundingClientRect();
+
+      const clickX = event.clientX - x;
+      const percentage = clickX / width;
+      const seconds = this.audio.duration() * percentage;
+
+      this.audio.seek(seconds);
+      this.audio.once("seek", this.updateProgress);
     },
   },
 });
