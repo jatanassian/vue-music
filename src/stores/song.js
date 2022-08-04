@@ -6,6 +6,12 @@ export default defineStore("song", {
     currentSong: {},
     audio: {},
   }),
+  getters: {
+    isAudioPlaying(state) {
+      if (state.audio.playing) return state.audio.playing();
+      return false;
+    },
+  },
   actions: {
     async newSong(song) {
       this.currentSong = song;
