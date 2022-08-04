@@ -17,5 +17,11 @@ export default defineStore("song", {
 
       this.audio.play();
     },
+    async toggleAudio() {
+      if (!this.audio.playing) return;
+
+      if (this.audio.playing()) this.audio.pause();
+      else this.audio.play();
+    },
   },
 });
