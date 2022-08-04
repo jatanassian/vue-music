@@ -126,6 +126,7 @@ export default {
     },
   },
   methods: {
+    // Fetch song info
     async getSong() {
       const songSnapshot = await songsCollection
         .doc(this.$route.params.id)
@@ -133,6 +134,7 @@ export default {
       if (songSnapshot.exists) this.song = songSnapshot.data();
       else this.$router.push({ name: "home" });
     },
+    // Fetch commentsfor a specific song
     async getComments() {
       this.comments = [];
 
@@ -147,6 +149,7 @@ export default {
         });
       });
     },
+    // Add comment to Firebase and refresh them
     async addComment(values, context) {
       this.loading = true;
       this.alert.show = true;
@@ -192,6 +195,7 @@ export default {
     this.getComments();
   },
   watch: {
+    // Update url with the sorting method selected
     sortSelection(value) {
       if (value === this.$route.query.sort) return;
 
