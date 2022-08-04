@@ -10,6 +10,7 @@
       <button
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+        @click.prevent="playSong"
       >
         <i class="fas fa-play"></i>
       </button>
@@ -91,8 +92,9 @@
 
 <script>
 import { songsCollection, auth, commentsCollection } from "@/includes/firebase";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import useUserStore from "@/stores/user";
+import useSongStore from "@/stores/song";
 
 export default {
   name: "Song",
@@ -126,6 +128,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(useSongStore, ["newSong"]),
     // Fetch song info
     async getSong() {
       const songSnapshot = await songsCollection
@@ -139,7 +142,7 @@ export default {
       this.comments = [];
 
       const commentsSnapshot = await commentsCollection
-        .where("user_id", "==", auth.currentUser.uid)
+        .where("song_id", "==", this.$route.params.id)
         .get();
 
       commentsSnapshot.forEach((comment) => {
@@ -185,6 +188,10 @@ export default {
       this.alert.text = "Comment added.";
 
       context.resetForm();
+    },
+    // Store song info in the state
+    playSong() {
+      this.newSong(this.song);
     },
   },
   created() {
