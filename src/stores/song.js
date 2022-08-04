@@ -18,6 +18,8 @@ export default defineStore("song", {
   },
   actions: {
     async newSong(song) {
+      if (this.audio instanceof Howl) this.audio.unload();
+
       this.currentSong = song;
 
       this.audio = new Howl({
