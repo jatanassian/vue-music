@@ -108,7 +108,7 @@ export default {
           // Upload succeeded
           async () => {
             const song = {
-              uid: auth.currentUser.uid,
+              user_id: auth.currentUser.uid,
               display_name: auth.currentUser.displayName,
               original_name: uploadingFile.snapshot.ref.name,
               modified_name: uploadingFile.snapshot.ref.name,

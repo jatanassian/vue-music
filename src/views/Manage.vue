@@ -49,7 +49,7 @@ export default {
     // Fetch user's songs in Firebase
     async getSongs() {
       const songsSnapshot = await songsCollection
-        .where("uid", "==", auth.currentUser.uid)
+        .where("user_id", "==", auth.currentUser.uid)
         .get();
       songsSnapshot.forEach(this.addSong);
     },
