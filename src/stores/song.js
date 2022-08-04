@@ -8,6 +8,7 @@ export default defineStore("song", {
     audio: {},
     duration: "0:00",
     seek: "0:00",
+    progress: "0%",
   }),
   getters: {
     isAudioPlaying(state) {
@@ -26,7 +27,7 @@ export default defineStore("song", {
 
       this.audio.play();
 
-      this.audio.on("play", () => requestAnimationFrame(this.progress));
+      this.audio.on("play", () => requestAnimationFrame(this.updateProgress));
     },
     async toggleAudio() {
       if (!this.audio.playing) return;
@@ -34,11 +35,13 @@ export default defineStore("song", {
       if (this.audio.playing()) this.audio.pause();
       else this.audio.play();
     },
-    progress() {
+    updateProgress() {
       this.seek = helper.formatTime(this.audio.seek());
       this.duration = helper.formatTime(this.audio.duration());
 
-      if (this.audio.playing) requestAnimationFrame(this.progress);
+      this.progress = `${(this.audio.seek() / this.audio.duration()) * 100}%`;
+
+      if (this.audio.playing) requestAnimationFrame(this.updateProgress);
     },
   },
 });
