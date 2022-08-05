@@ -95,6 +95,7 @@
 </template>
 
 <script>
+// TODO: Change play button to pause if playing, but only if it is this audio currently playing
 import { songsCollection, auth, commentsCollection } from "@/includes/firebase";
 import { mapState, mapActions } from "pinia";
 import useUserStore from "@/stores/user";
