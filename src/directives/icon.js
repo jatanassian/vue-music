@@ -1,4 +1,4 @@
-// A component may be more reusable, but I wanted to practice with directives
+// NOTE: A component may be more reusable, but I wanted to practice with directives
 export default {
   beforeMount(el, binding) {
     let iconClass = `fa fa-${binding.value} text-xl`;

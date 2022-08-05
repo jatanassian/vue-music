@@ -3,7 +3,7 @@
     <!-- Header -->
     <div
       class="px-6 pt-6 pb-5 font-bold border-b border-gray-200"
-      v-icon="'upload'"
+      v-icon.right.green="'upload'"
     >
       <span class="card-title">Upload</span>
     </div>
