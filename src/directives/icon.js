@@ -1,4 +1,4 @@
-// This code is not really reusable yet, it was more for practising with custom directives
+// This code doesn't really save time code-wise, it was more for practising with custom directives
 export default {
   beforeMount(el, binding) {
     // Use the v-icon:full argument to specify you're replacing the entire class (useful if szitching away from font awsome)
