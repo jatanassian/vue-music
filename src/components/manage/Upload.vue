@@ -75,7 +75,17 @@ export default {
         : [...event.target.files];
 
       files.forEach((file) => {
-        if (file.type !== "audio/mpeg") {
+        if (file.type !== "audio/mpeg") return;
+
+        if (navigator.onLine === false) {
+          this.uploads.push({
+            uploadingFile: {},
+            currentProgress: 100,
+            name: file.name,
+            color: "bg-red-400",
+            icon: "fas fa-times",
+            textClass: "text-red-400",
+          });
           return;
         }
 
