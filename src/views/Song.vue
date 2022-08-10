@@ -135,10 +135,8 @@ export default {
   methods: {
     ...mapActions(useSongStore, ["newSong"]),
     // Fetch song info
-    async getSong() {
-      const songSnapshot = await songsCollection
-        .doc(this.$route.params.id)
-        .get();
+    async getSong(id) {
+      const songSnapshot = await songsCollection.doc(id).get();
       if (songSnapshot.exists) this.song = songSnapshot.data();
       else this.$router.push({ name: "home" });
     },
@@ -199,12 +197,18 @@ export default {
       this.newSong(this.song);
     },
   },
-  created() {
-    const { sort } = this.$route.query;
-    this.sortSelection = sort === "new" || sort === "old" ? sort : "new";
+  async beforeRouteEnter(to, from, next) {
+    const songSnapshot = await songsCollection.doc(to.params.id).get();
 
-    this.getSong();
-    this.getComments();
+    next((vm) => {
+      if (songSnapshot.exists) vm.song = songSnapshot.data();
+      else vm.$router.push({ name: "home" });
+
+      const { sort } = vm.$route.query;
+      vm.sortSelection = sort === "new" || sort === "old" ? sort : "new";
+
+      vm.getComments();
+    });
   },
   watch: {
     // Update url with the sorting method selected
