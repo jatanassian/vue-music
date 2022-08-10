@@ -7,6 +7,7 @@ import VeeValidatePlugin from "./includes/validation";
 import { auth } from "./includes/firebase";
 import Icon from "./directives/icon";
 import { registerSW } from "virtual:pwa-register";
+import GlobalsComponents from "./includes/globals";
 
 import "./assets/base.css";
 import "./assets/main.css";
@@ -22,6 +23,7 @@ auth.onAuthStateChanged(() => {
     app.use(createPinia());
     app.use(router);
     app.use(VeeValidatePlugin);
+    app.use(GlobalsComponents);
     app.directive("icon", Icon);
 
     app.mount("#app");
