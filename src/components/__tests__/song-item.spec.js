@@ -19,4 +19,20 @@ describe("SongItem.vue", () => {
 
     expect(author.text()).toBe(song.display_name);
   });
+
+  test("renders song.id in id attribute", () => {
+    const song = {
+      id: "abc",
+    };
+
+    const wrapper = shallowMount(SongItem, {
+      propsData: { song },
+      global: {
+        components: { "router-link": RouterLinkStub },
+      },
+    });
+    console.log(wrapper.attributes());
+
+    expect(wrapper.attributes()["data-test-id"]).toBe(`song-id-${song.id}`);
+  });
 });
