@@ -15,6 +15,8 @@ describe("SongItem.vue", () => {
       },
     });
 
-    expect(wrapper.text()).toContain(song.display_name);
+    const author = wrapper.find(".text-gray-500");
+
+    expect(author.text()).toBe(song.display_name);
   });
 });
