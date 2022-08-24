@@ -3,7 +3,7 @@ import { shallowMount, RouterLinkStub } from "@vue/test-utils";
 import { describe, expect, test } from "vitest";
 
 describe("SongItem.vue", () => {
-  test("render song.display_name", () => {
+  test("renders song.display_name", () => {
     const song = {
       display_name: "Test",
     };
