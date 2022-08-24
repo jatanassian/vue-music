@@ -6,7 +6,7 @@ import { expect } from "vitest";
 
 describe("Home.vue", () => {
   test("renders list of songs", () => {
-    const songs = [{}, {}, {}];
+    const songs = [{ id: "1" }, { id: "2" }, { id: "3" }];
 
     const component = shallowMount(Home, {
       data() {
