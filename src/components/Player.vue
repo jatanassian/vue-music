@@ -8,7 +8,11 @@
     </div>
     <div class="flex flex-nowrap gap-4 items-center">
       <!-- Play/Pause Button -->
-      <button type="button" @click.prevent="toggleAudio">
+      <button
+        type="button"
+        id="cypress-player-play-btn"
+        @click.prevent="toggleAudio"
+      >
         <i
           class="fa text-gray-500 text-xl"
           :class="isAudioPlaying ? 'fa-pause' : 'fa-play'"
