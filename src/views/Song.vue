@@ -1,5 +1,5 @@
 <template>
-  <main class="pb-11">
+  <main class="pb-20">
     <!-- Music Header -->
     <section class="w-full mb-8 py-14 text-center text-white relative">
       <div
@@ -14,7 +14,12 @@
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
           @click.prevent="playSong"
         >
-          <i class="fas" :class="isAudioPlaying ? 'fa-pause' : 'fa-play'"></i>
+          <i
+            class="fas"
+            :class="
+              isThisSongPlaying && isAudioPlaying ? 'fa-pause' : 'fa-play'
+            "
+          ></i>
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
@@ -133,6 +138,9 @@ export default {
         }
       });
     },
+    isThisSongPlaying() {
+      return this.currentSong.id === this.$route.params.id;
+    },
   },
   methods: {
     ...mapActions(useSongStore, ["newSong"]),
@@ -190,7 +198,7 @@ export default {
     },
     // Store song info in the state
     playSong() {
-      if (this.currentSong.modified_name) this.toggleAudio();
+      if (this.isThisSongPlaying) this.toggleAudio();
       else this.newSong(this.song);
     },
   },
@@ -198,8 +206,12 @@ export default {
     const songSnapshot = await songsCollection.doc(to.params.id).get();
 
     next((vm) => {
-      if (songSnapshot.exists) vm.song = songSnapshot.data();
-      else vm.$router.push({ name: "home" });
+      if (songSnapshot.exists) {
+        vm.song = {
+          ...songSnapshot.data(),
+          id: songSnapshot.id,
+        };
+      } else vm.$router.push({ name: "home" });
 
       const { sort } = vm.$route.query;
       vm.sortSelection = sort === "new" || sort === "old" ? sort : "new";
