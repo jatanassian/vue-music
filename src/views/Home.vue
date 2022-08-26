@@ -1,5 +1,5 @@
 <template>
-  <main class="pb-11">
+  <main class="pb-20">
     <!-- Introduction -->
     <section class="mb-8 py-20 text-white text-center relative">
       <div

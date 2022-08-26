@@ -1,5 +1,5 @@
 <template>
-  <section class="container mx-auto mt-6 pb-11">
+  <section class="container mx-auto mt-6 pb-20">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
         <upload :add-song="addSong"></upload>
