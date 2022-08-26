@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="pb-11">
     <!-- Music Header -->
     <section class="w-full mb-8 py-14 text-center text-white relative">
       <div

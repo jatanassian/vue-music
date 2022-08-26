@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="pb-11">
     <!-- Introduction -->
     <section class="mb-8 py-20 text-white text-center relative">
       <div
@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       songs: [],
-      songsPerPage: 3,
+      songsPerPage: 5,
       loading: false,
     };
   },
