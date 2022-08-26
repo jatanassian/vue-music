@@ -14,7 +14,7 @@
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
           @click.prevent="playSong"
         >
-          <i class="fas fa-play"></i>
+          <i class="fas" :class="isAudioPlaying ? 'fa-pause' : 'fa-play'"></i>
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
@@ -122,6 +122,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ["userLoggedIn"]),
+    ...mapState(useSongStore, ["isAudioPlaying", "toggleAudio", "currentSong"]),
     sortedComments() {
       const comments = [...this.comments];
       return comments.sort((a, b) => {
@@ -135,12 +136,6 @@ export default {
   },
   methods: {
     ...mapActions(useSongStore, ["newSong"]),
-    // Fetch song info
-    async getSong(id) {
-      const songSnapshot = await songsCollection.doc(id).get();
-      if (songSnapshot.exists) this.song = songSnapshot.data();
-      else this.$router.push({ name: "home" });
-    },
     // Fetch commentsfor a specific song
     async getComments() {
       this.comments = [];
@@ -195,7 +190,8 @@ export default {
     },
     // Store song info in the state
     playSong() {
-      this.newSong(this.song);
+      if (this.currentSong.modified_name) this.toggleAudio();
+      else this.newSong(this.song);
     },
   },
   async beforeRouteEnter(to, from, next) {
