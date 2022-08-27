@@ -43,7 +43,6 @@
 </template>
 
 <script>
-// import { mapStores } from "pinia";
 import useModalStore from "@/stores/modal";
 import useUserStore from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
