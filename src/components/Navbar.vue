@@ -43,25 +43,33 @@
 </template>
 
 <script>
-import { mapStores } from "pinia";
+// import { mapStores } from "pinia";
 import useModalStore from "@/stores/modal";
 import useUserStore from "@/stores/user";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   name: "Navbar",
-  computed: {
-    ...mapStores(useModalStore, useUserStore),
-  },
-  methods: {
-    toggleAuthModal() {
-      this.modalStore.isOpen = !this.modalStore.isOpen;
-    },
-    signOut() {
-      this.userStore.signOut();
-      if (this.$route.meta.requiresAuth) {
-        this.$router.push({ name: "home" });
-      }
-    },
+  setup() {
+    const modalStore = useModalStore();
+    const userStore = useUserStore();
+    const route = useRoute();
+    const router = useRouter();
+
+    function toggleAuthModal() {
+      modalStore.isOpen = !modalStore.isOpen;
+    }
+
+    function signOut() {
+      userStore.signOut();
+      if (route.meta.requiresAuth) router.push({ name: "home" });
+    }
+
+    return {
+      userStore,
+      toggleAuthModal,
+      signOut,
+    };
   },
 };
 </script>
