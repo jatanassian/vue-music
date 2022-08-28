@@ -5,6 +5,7 @@ const Home = () => import("@/views/Home.vue");
 const About = () => import("@/views/About.vue");
 const Manage = () => import("@/views/Manage.vue");
 const Song = () => import("@/views/Song.vue");
+const Profile = () => import("@/views/Profile.vue");
 
 const routes = [
   {
@@ -29,6 +30,14 @@ const routes = [
     name: "song",
     path: "/song/:id",
     component: Song,
+  },
+  {
+    name: "profile",
+    path: "/profile",
+    component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/:catchAll(.*)*",
