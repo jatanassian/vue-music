@@ -27,9 +27,7 @@ export default {
     ...mapWritableState(useUserStore, ["userLoggedIn"]),
   },
   created() {
-    if (auth.currentUser) {
-      this.userLoggedIn = true;
-    }
+    if (auth.currentUser) this.userLoggedIn = true;
   },
 };
 </script>
