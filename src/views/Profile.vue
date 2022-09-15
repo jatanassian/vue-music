@@ -17,8 +17,8 @@
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
-          <div class="text-3xl font-bold">Username</div>
-          <div>Country</div>
+          <div class="text-3xl font-bold">{{ user.name }}</div>
+          <div>{{ user.country }}</div>
         </div>
       </div>
     </section>
@@ -26,12 +26,26 @@
 </template>
 
 <script>
+import { usersCollection } from "@/includes/firebase";
+
 export default {
   name: "Profile",
   data() {
     return {
       user: {},
     };
+  },
+  async beforeRouteEnter(to, from, next) {
+    const userSnapshot = await usersCollection
+      .where("name", "==", to.params.name)
+      .get();
+
+    next((vm) => {
+      userSnapshot.forEach((user) => {
+        if (user.exists) vm.user = user.data();
+      });
+      // else vm.$router.push({ name: "home" });
+    });
   },
 };
 </script>
