@@ -5,7 +5,7 @@ const Home = () => import("@/views/Home.vue");
 const About = () => import("@/views/About.vue");
 const Manage = () => import("@/views/Manage.vue");
 const Song = () => import("@/views/Song.vue");
-const Profile = () => import("@/views/Profile.vue");
+const User = () => import("@/views/User.vue");
 
 const routes = [
   {
@@ -32,9 +32,9 @@ const routes = [
     component: Song,
   },
   {
-    name: "profile",
-    path: "/profile/:name",
-    component: Profile,
+    name: "user",
+    path: "/user/:name",
+    component: User,
     meta: {
       requiresAuth: true,
     },

@@ -29,7 +29,7 @@
 import { usersCollection } from "@/includes/firebase";
 
 export default {
-  name: "Profile",
+  name: "User",
   data() {
     return {
       user: {},
