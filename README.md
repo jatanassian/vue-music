@@ -7,4 +7,4 @@ Project made with Vue 3, Vite, Tailwind CSS and Firebase/Firestore
 Testing done with Vitest and Cypress  
 Audio player made using Howler.js
 
-Currently adding profile page
+Currently adding profile page...
