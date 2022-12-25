@@ -8,3 +8,5 @@ Testing done with Vitest and Cypress
 Audio player made using Howler.js
 
 Currently adding profile page...
+
+Enjoy!
