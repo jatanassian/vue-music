@@ -265,15 +265,15 @@
     </div>
   </div>
 
-  <Auth />
+  <AuthModal />
 </template>
 
 <script>
 import Navbar from '@/components/Navbar.vue';
-import Auth from '@/components/Auth.vue';
+import AuthModal from '@/components/AuthModal.vue';
 
 export default {
   name: 'App',
-  components: { Navbar, Auth }
+  components: { Navbar, AuthModal }
 };
 </script>
