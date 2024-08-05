@@ -79,6 +79,12 @@
               Submit
             </button>
           </form>
+          <div
+            v-if="loading.register"
+            :class="`text-white text-center font-bold p-4 rounded mb-4 ${alert.variant}`"
+          >
+            {{ alert.message }}
+          </div>
           <!-- Registration Form -->
           <VeeForm v-show="activeTab === 'register'" :validation-schema="schema" @submit="register">
             <!-- Name -->
@@ -166,6 +172,7 @@
             <button
               type="submit"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
+              :disabled="loading.register"
             >
               Submit
             </button>
@@ -193,6 +200,15 @@ export default {
         confirm_password: 'password_mismatch:@password',
         country: 'required',
         tos: 'tos'
+      },
+      loading: {
+        register: false,
+        login: false
+      },
+      alert: {
+        show: false,
+        variant: 'bg-blue-500',
+        message: 'Your account is being created, please wait.'
       }
     };
   },
@@ -202,7 +218,16 @@ export default {
   },
   methods: {
     register(values) {
-      console.log(values);
+      this.loading.register = true;
+      this.alert.show = true;
+      this.alert.variant = 'bg-blue-500';
+      this.alert.message = 'Your account is being created, please wait.';
+
+      setTimeout(() => {
+        this.alert.variant = 'bg-green-500';
+        this.alert.message = 'Account created successfully.';
+        console.log(values);
+      }, 1000);
     }
   }
 };
