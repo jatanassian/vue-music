@@ -53,24 +53,34 @@
           </ul>
 
           <!-- Login Form -->
-          <form v-show="activeTab === 'login'">
+          <div
+            v-if="loading.login"
+            :class="`text-white text-center font-bold p-4 rounded mb-4 ${alert.variant}`"
+          >
+            {{ alert.message }}
+          </div>
+          <VeeForm v-show="activeTab === 'login'" :validation-schema="loginSchema" @submit="login">
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input
+              <VeeField
+                name="email"
                 type="email"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Email"
               />
+              <ErrorMessage class="text-red-600" name="email" />
             </div>
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <input
+              <VeeField
+                name="password"
                 type="password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Password"
               />
+              <ErrorMessage class="text-red-600" name="password" />
             </div>
             <button
               type="submit"
@@ -78,7 +88,7 @@
             >
               Submit
             </button>
-          </form>
+          </VeeForm>
           <div
             v-if="loading.register"
             :class="`text-white text-center font-bold p-4 rounded mb-4 ${alert.variant}`"
@@ -86,7 +96,11 @@
             {{ alert.message }}
           </div>
           <!-- Registration Form -->
-          <VeeForm v-show="activeTab === 'register'" :validation-schema="schema" @submit="register">
+          <VeeForm
+            v-show="activeTab === 'register'"
+            :validation-schema="registerSchema"
+            @submit="register"
+          >
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
@@ -192,7 +206,7 @@ export default {
   data() {
     return {
       activeTab: 'login',
-      schema: {
+      registerSchema: {
         name: 'required|min:3|max:100|alpha_spaces',
         email: 'required|min:3|max:100|email',
         age: 'required|min_value:18|max_value:130',
@@ -200,6 +214,10 @@ export default {
         confirm_password: 'password_mismatch:@password',
         country: 'required',
         tos: 'tos'
+      },
+      loginSchema: {
+        email: 'required|email',
+        password: 'required'
       },
       loading: {
         register: false,
@@ -228,6 +246,9 @@ export default {
         this.alert.message = 'Account created successfully.';
         console.log(values);
       }, 1000);
+    },
+    login(values) {
+      console.log(values);
     }
   }
 };
