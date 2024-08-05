@@ -80,11 +80,7 @@
             </button>
           </form>
           <!-- Registration Form -->
-          <vee-form
-            v-show="activeTab === 'register'"
-            :validation-schema="schema"
-            @submit="register"
-          >
+          <VeeForm v-show="activeTab === 'register'" :validation-schema="schema" @submit="register">
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
@@ -120,13 +116,15 @@
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <VeeField
-                name="password"
-                type="password"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Password"
-              />
-              <ErrorMessage class="text-red-600" name="password" />
+              <VeeField name="password" :bails="false" v-slot="{ field, errors }">
+                <input
+                  v-bind="field"
+                  type="password"
+                  class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+                  placeholder="Password"
+                />
+                <div v-for="error in errors" :key="error" class="text-red-600">{{ error }}</div>
+              </VeeField>
             </div>
             <!-- Confirm Password -->
             <div class="mb-3">
@@ -147,10 +145,12 @@
                 name="country"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               >
+                <option value="" disabled selected>Select your country</option>
                 <option value="Canada">Canada</option>
                 <option value="USA">USA</option>
                 <option value="France">France</option>
               </VeeField>
+              <ErrorMessage class="text-red-600" name="country" />
             </div>
             <!-- TOS -->
             <div class="mb-3 pl-6">
@@ -169,7 +169,7 @@
             >
               Submit
             </button>
-          </vee-form>
+          </VeeForm>
         </div>
       </div>
     </div>
@@ -190,9 +190,9 @@ export default {
         email: 'required|min:3|max:100|email',
         age: 'required|min_value:18|max_value:130',
         password: 'required|min:3|max:100',
-        confirm_password: 'confirmed:@password',
+        confirm_password: 'password_mismatch:@password',
         country: 'required',
-        tos: 'required'
+        tos: 'tos'
       }
     };
   },
