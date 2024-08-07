@@ -1,7 +1,7 @@
 <template>
   <!-- Alert -->
   <div
-    v-if="isLoading"
+    v-if="alert.show"
     :class="`text-white text-center font-bold p-4 rounded mb-4 ${alert.variant}`"
   >
     {{ alert.message }}
@@ -110,6 +110,8 @@
 </template>
 
 <script>
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+
 export default {
   name: 'RegisterForm',
   data() {
@@ -132,17 +134,32 @@ export default {
     };
   },
   methods: {
-    register(values) {
+    /**
+     * Register the user in Firebase
+     */
+    async register(values) {
       this.isLoading = true;
       this.alert.show = true;
       this.alert.variant = 'bg-blue-500';
       this.alert.message = 'Your account is being created, please wait.';
 
-      setTimeout(() => {
+      try {
+        const auth = getAuth();
+        const userCredentials = await createUserWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password
+        );
+        console.log(userCredentials);
+
         this.alert.variant = 'bg-green-500';
         this.alert.message = 'Account created successfully.';
-        console.log(values);
-      }, 1000);
+      } catch {
+        this.alert.variant = 'bg-red-500';
+        this.alert.message = 'Unable to register the account, please try again later.';
+      } finally {
+        this.isLoading = false;
+      }
     }
   }
 };
