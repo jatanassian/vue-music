@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { createAuthUserWIthEmailAndPassword, createUserDocument } from '@/utils/firebase';
+import { registerUser } from '@/utils/firebase';
 
 export default {
   name: 'RegisterForm',
@@ -144,13 +144,7 @@ export default {
       this.alert.message = 'Your account is being created, please wait.';
 
       try {
-        const userCredentials = await createAuthUserWIthEmailAndPassword(
-          formValues.email,
-          formValues.password
-        );
-
-        const { user } = userCredentials;
-        await createUserDocument(user, formValues);
+        registerUser(formValues);
 
         this.alert.variant = 'bg-green-500';
         this.alert.message = 'Account created successfully.';

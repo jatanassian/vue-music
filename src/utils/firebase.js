@@ -16,30 +16,21 @@ export const auth = getAuth();
 export const db = getFirestore();
 
 /**
- * Create user in Firebase Authentication.
+ * Register user in database
  *
- * @param {string} email
- * @param {string} password
- * @return {any}
+ * @param userData
  */
-export const createAuthUserWIthEmailAndPassword = async (email, password) => {
-  return await createUserWithEmailAndPassword(auth, email, password);
-};
+export const registerUser = async (userData) => {
+  // Create user in Firebase Authentication
+  const authUser = createUserWithEmailAndPassword(auth, userData.email, userData.password);
 
-/**
- * Create user in the Firestore Database.
- *
- * @param {any} authUser
- * @param {any} user
- * @return {void}
- */
-export const createUserDocument = async (authUser, user) => {
+  // Create user document in the Firestore Database
   const userRef = await doc(db, 'users', authUser.id);
   await setDoc(userRef, {
-    name: user.name,
-    email: user.email,
-    age: user.age,
-    country: user.country,
+    name: userData.name,
+    email: userData.email,
+    age: userData.age,
+    country: userData.country,
     createdAt: new Date()
   });
 };
