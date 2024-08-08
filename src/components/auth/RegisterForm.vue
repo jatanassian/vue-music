@@ -111,6 +111,8 @@
 
 <script>
 import { registerUser } from '@/utils/firebase';
+import { mapWritableState } from 'pinia';
+import useUserStore from '@/stores/user';
 
 export default {
   name: 'RegisterForm',
@@ -133,6 +135,9 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapWritableState(useUserStore, ['isLoggedIn'])
+  },
   methods: {
     /**
      * Register the user in the database
@@ -144,10 +149,11 @@ export default {
       this.alert.message = 'Your account is being created, please wait.';
 
       try {
-        registerUser(formValues);
+        await registerUser(formValues);
 
         this.alert.variant = 'bg-green-500';
         this.alert.message = 'Account created successfully.';
+        this.isLoggedIn = true;
       } catch {
         this.alert.variant = 'bg-red-500';
         this.alert.message = 'Unable to register the account, please try again later.';

@@ -22,10 +22,10 @@ export const db = getFirestore();
  */
 export const registerUser = async (userData) => {
   // Create user in Firebase Authentication
-  const authUser = createUserWithEmailAndPassword(auth, userData.email, userData.password);
+  const authUser = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
 
   // Create user document in the Firestore Database
-  const userRef = await doc(db, 'users', authUser.id);
+  const userRef = await doc(db, 'users', authUser.user.uid);
   await setDoc(userRef, {
     name: userData.name,
     email: userData.email,
