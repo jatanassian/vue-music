@@ -271,9 +271,20 @@
 <script>
 import Navbar from '@/components/Navbar.vue';
 import AuthModal from '@/components/AuthModal.vue';
+import useUserStore from '@/stores/user';
+import { mapWritableState } from 'pinia';
+import { auth } from '@/utils/firebase';
 
 export default {
   name: 'App',
-  components: { Navbar, AuthModal }
+  components: { Navbar, AuthModal },
+  computed: {
+    ...mapWritableState(useUserStore, ['isLoggedIn'])
+  },
+  created() {
+    if (auth.currentUser) {
+      this.isLoggedIn = true;
+    }
+  }
 };
 </script>
