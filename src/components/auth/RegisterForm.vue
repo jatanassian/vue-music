@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { createAuthUserWIthEmailAndPassword, createUserDocument } from '@/utils/firebase';
 
 export default {
   name: 'RegisterForm',
@@ -135,22 +135,22 @@ export default {
   },
   methods: {
     /**
-     * Register the user in Firebase
+     * Register the user in the database
      */
-    async register(values) {
+    async register(formValues) {
       this.isLoading = true;
       this.alert.show = true;
       this.alert.variant = 'bg-blue-500';
       this.alert.message = 'Your account is being created, please wait.';
 
       try {
-        const auth = getAuth();
-        const userCredentials = await createUserWithEmailAndPassword(
-          auth,
-          values.email,
-          values.password
+        const userCredentials = await createAuthUserWIthEmailAndPassword(
+          formValues.email,
+          formValues.password
         );
-        console.log(userCredentials);
+
+        const { user } = userCredentials;
+        await createUserDocument(user, formValues);
 
         this.alert.variant = 'bg-green-500';
         this.alert.message = 'Account created successfully.';
