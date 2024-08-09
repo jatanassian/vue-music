@@ -1,7 +1,7 @@
 <template>
   <!-- Alert -->
   <div
-    v-if="isLoading"
+    v-if="alert.show"
     :class="`text-white text-center font-bold p-4 rounded mb-4 ${alert.variant}`"
   >
     {{ alert.message }}
@@ -45,6 +45,9 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia';
+import useUserStore from '@/stores/user';
+
 export default {
   name: 'LoginForm',
   data() {
@@ -62,17 +65,23 @@ export default {
     };
   },
   methods: {
-    login(values) {
+    ...mapActions(useUserStore, ['authenticate']),
+    async login(formValues) {
       this.isLoading = true;
       this.alert.show = true;
       this.alert.variant = 'bg-blue-500';
-      this.alert.message = 'Loading...';
+      this.alert.message = 'Logging in, please wait.';
 
-      setTimeout(() => {
+      try {
+        await this.authenticate(formValues);
         this.alert.variant = 'bg-green-500';
-        this.alert.message = 'Logged in succesfully';
-        console.log(values);
-      }, 1000);
+        this.alert.message = 'Logged in successfully.';
+      } catch {
+        this.alert.variant = 'bg-red-500';
+        this.alert.message = 'Unable to login, please try again.';
+      } finally {
+        this.isLoading = false;
+      }
     }
   }
 };

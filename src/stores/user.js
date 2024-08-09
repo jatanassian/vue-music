@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { registerUser } from '@/utils/firebase';
+import { registerUser, authenticateUser } from '@/utils/firebase';
 
 export default defineStore('user', {
   state: () => ({
@@ -8,6 +8,10 @@ export default defineStore('user', {
   actions: {
     async register(formValues) {
       await registerUser(formValues);
+      this.isLoggedIn = true;
+    },
+    async authenticate(formValues) {
+      await authenticateUser(formValues);
       this.isLoggedIn = true;
     }
   }

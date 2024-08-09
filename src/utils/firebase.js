@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -33,4 +33,8 @@ export const registerUser = async (userData) => {
     country: userData.country,
     createdAt: new Date()
   });
+};
+
+export const authenticateUser = async ({ email, password }) => {
+  await signInWithEmailAndPassword(auth, email, password);
 };
