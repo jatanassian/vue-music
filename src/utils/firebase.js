@@ -1,5 +1,10 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut
+} from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -15,11 +20,6 @@ initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const db = getFirestore();
 
-/**
- * Register user in database
- *
- * @param userData
- */
 export const registerUser = async (userData) => {
   // Create user in Firebase Authentication
   const authUser = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
@@ -37,4 +37,8 @@ export const registerUser = async (userData) => {
 
 export const authenticateUser = async ({ email, password }) => {
   await signInWithEmailAndPassword(auth, email, password);
+};
+
+export const signUserOut = async () => {
+  await signOut(auth);
 };

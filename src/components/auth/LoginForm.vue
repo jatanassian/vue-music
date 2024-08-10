@@ -45,8 +45,9 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapWritableState } from 'pinia';
 import useUserStore from '@/stores/user';
+import useModalStore from '@/stores/modal';
 
 export default {
   name: 'LoginForm',
@@ -63,6 +64,9 @@ export default {
         message: 'Logging in, please wait.'
       }
     };
+  },
+  computed: {
+    ...mapWritableState(useModalStore, { isModalOpen: 'isOpen' })
   },
   methods: {
     ...mapActions(useUserStore, ['authenticate']),
@@ -81,6 +85,7 @@ export default {
         this.alert.message = 'Unable to login, please try again.';
       } finally {
         this.isLoading = false;
+        this.isModalOpen = false;
       }
     }
   }

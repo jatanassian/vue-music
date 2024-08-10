@@ -110,8 +110,9 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapWritableState } from 'pinia';
 import useUserStore from '@/stores/user';
+import useModalStore from '@/stores/modal';
 
 export default {
   name: 'RegisterForm',
@@ -134,6 +135,9 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapWritableState(useModalStore, { isModalOpen: 'isOpen' })
+  },
   methods: {
     ...mapActions(useUserStore, { createUser: 'register' }),
     /**
@@ -154,6 +158,7 @@ export default {
         this.alert.message = 'Unable to register the account, please try again later.';
       } finally {
         this.isLoading = false;
+        this.isModalOpen = false;
       }
     }
   }
