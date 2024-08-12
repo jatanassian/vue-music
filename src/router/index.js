@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Manage from '@/views/Manage.vue';
+import useUserStore from '@/stores/user';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,7 @@ const router = createRouter({
     {
       path: '/manage',
       name: 'manage',
+      meta: { requiresAuth: true },
       component: Manage
     },
     {
@@ -29,6 +31,20 @@ const router = createRouter({
       redirect: { name: 'home' }
     }
   ]
+});
+
+router.beforeEach((to, from, next) => {
+  // If the page doesn't require auth, do nothing
+  if (!to.meta.requiresAuth) {
+    return next();
+  }
+
+  // If the page requires auth but the user isn't logged in, redirect to home
+  const store = useUserStore();
+  if (store.isLoggedIn) {
+    return next();
+  }
+  next({ name: 'home' });
 });
 
 export default router;
