@@ -134,3 +134,15 @@
     </div>
   </section>
 </template>
+
+<script>
+import useUserStore from '@/stores/user';
+
+export default {
+  name: 'manage',
+  beforeRouteEnter(to, from, next) {
+    const store = useUserStore();
+    store.isLoggedIn ? next() : next({ name: 'home' });
+  }
+};
+</script>

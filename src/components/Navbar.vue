@@ -51,6 +51,7 @@ export default {
     },
     async logout() {
       await this.logUserOut();
+      this.$route.name === 'manage' && this.$router.push({ name: 'home' });
     }
   }
 };
