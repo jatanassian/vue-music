@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { uploadFile } from '@/utils/firebase';
 export default {
   name: 'Upload',
   data() {
@@ -50,7 +51,14 @@ export default {
     };
   },
   methods: {
-    upload() {
+    upload(event) {
+      const files = [...event.dataTransfer.files];
+      files.forEach((file) => {
+        if (file.type !== 'audio/mp3' && file.type !== 'audio/mpeg') {
+          return;
+        }
+        uploadFile(file);
+      });
       this.isDraggedOver = false;
     }
   }

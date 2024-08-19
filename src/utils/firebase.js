@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -19,6 +20,7 @@ initializeApp(firebaseConfig);
 
 export const auth = getAuth();
 export const db = getFirestore();
+export const storage = getStorage();
 
 export const registerUser = async (userData) => {
   // Create user in Firebase Authentication
@@ -41,4 +43,9 @@ export const authenticateUser = async ({ email, password }) => {
 
 export const signUserOut = async () => {
   await signOut(auth);
+};
+
+export const uploadFile = async (file) => {
+  const songRef = ref(storage, `songs/${file.name}`);
+  await uploadBytes(songRef, file);
 };
