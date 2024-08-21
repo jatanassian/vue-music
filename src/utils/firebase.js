@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -45,7 +45,7 @@ export const signUserOut = async () => {
   await signOut(auth);
 };
 
-export const uploadFile = async (file) => {
+export const uploadFile = (file) => {
   const songRef = ref(storage, `songs/${file.name}`);
-  await uploadBytes(songRef, file);
+  return uploadBytesResumable(songRef, file);
 };
