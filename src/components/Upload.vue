@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { uploadFile } from '@/utils/firebase';
+import { createSong, uploadFile } from '@/utils/firebase';
 export default {
   name: 'Upload',
   data() {
@@ -76,7 +76,8 @@ export default {
             this.uploads[uploadIndex].icon = 'fas fa-times';
             this.uploads[uploadIndex].textClass = 'text-red-400';
           },
-          () => {
+          async () => {
+            await createSong(uploadTask.snapshot);
             this.uploads[uploadIndex].variant = 'bg-green-400';
             this.uploads[uploadIndex].icon = 'fas fa-check';
             this.uploads[uploadIndex].textClass = 'text-green-400';

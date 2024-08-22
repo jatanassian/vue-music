@@ -5,8 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth';
-import { getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { getFirestore, doc, setDoc, addDoc, collection } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -48,4 +48,18 @@ export const signUserOut = async () => {
 export const uploadFile = (file) => {
   const songRef = ref(storage, `songs/${file.name}`);
   return uploadBytesResumable(songRef, file);
+};
+
+export const createSong = async (snapshot) => {
+  const song = {
+    uid: auth.currentUser.uid,
+    display_name: auth.currentUser.displayName,
+    original_name: snapshot.ref.name,
+    modified_name: snapshot.ref.name,
+    genre: '',
+    comments_count: 0
+  };
+
+  song.url = await getDownloadURL(snapshot.ref);
+  await addDoc(collection(db, 'songs'), song);
 };
