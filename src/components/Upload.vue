@@ -19,11 +19,15 @@
       <!-- Progess Bars -->
       <div v-for="upload in uploads" :key="upload.name" class="mb-4">
         <!-- File Name -->
-        <div class="font-bold text-sm">{{ upload.name }}</div>
+        <div class="font-bold text-sm" :class="upload.textClass">
+          <i :class="upload.icon"></i>
+          {{ upload.name }}
+        </div>
         <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
           <!-- Inner Progress Bar -->
           <div
-            class="transition-all progress-bar bg-blue-400"
+            class="transition-all progress-bar"
+            :class="upload.variant"
             :style="{ width: upload.currentProgress + '%' }"
           ></div>
         </div>
@@ -55,13 +59,29 @@ export default {
           this.uploads.push({
             task: uploadTask,
             currentProgress: 0,
-            name: file.name
+            name: file.name,
+            variant: 'bg-blue-400',
+            icon: 'fas fa-spinner fa-spin',
+            textClass: ''
           }) - 1; // .push() returns the length of the array, so we substract 1 to get the index
 
-        uploadTask.on('state_changed', (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.uploads[uploadIndex].currentProgress = progress;
-        });
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.uploads[uploadIndex].currentProgress = progress;
+          },
+          () => {
+            this.uploads[uploadIndex].variant = 'bg-red-400';
+            this.uploads[uploadIndex].icon = 'fas fa-times';
+            this.uploads[uploadIndex].textClass = 'text-red-400';
+          },
+          () => {
+            this.uploads[uploadIndex].variant = 'bg-green-400';
+            this.uploads[uploadIndex].icon = 'fas fa-check';
+            this.uploads[uploadIndex].textClass = 'text-green-400';
+          }
+        );
       }
       this.isDraggedOver = false;
     }
