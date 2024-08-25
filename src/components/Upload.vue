@@ -87,6 +87,9 @@ export default {
       }
       this.isDraggedOver = false;
     }
+  },
+  beforeUnmount() {
+    this.uploads.forEach((upload) => upload.task.cancel());
   }
 };
 </script>
