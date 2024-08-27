@@ -6,7 +6,16 @@ import {
   signOut
 } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { getFirestore, doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -52,7 +61,7 @@ export const uploadFile = (file) => {
 
 export const createSong = async (snapshot) => {
   const song = {
-    uid: auth.currentUser.uid,
+    user_id: auth.currentUser.uid,
     display_name: auth.currentUser.displayName,
     original_name: snapshot.ref.name,
     modified_name: snapshot.ref.name,
@@ -62,4 +71,12 @@ export const createSong = async (snapshot) => {
 
   song.url = await getDownloadURL(snapshot.ref);
   await addDoc(collection(db, 'songs'), song);
+};
+
+export const getSongs = async () => {
+  const songsQuery = query(collection(db, 'songs'), where('user_id', '==', auth.currentUser.uid));
+  const songsSnapshot = await getDocs(songsQuery);
+  const output = [];
+  songsSnapshot.forEach((doc) => output.push({ ...doc.data(), id: doc.id }));
+  return output;
 };

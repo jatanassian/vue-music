@@ -102,9 +102,18 @@
 
 <script>
 import Upload from '@/components/Upload.vue';
+import { getSongs } from '@/utils/firebase';
 
 export default {
   name: 'Manage',
-  components: { Upload }
+  components: { Upload },
+  data() {
+    return {
+      songs: []
+    };
+  },
+  async created() {
+    this.songs = await getSongs();
+  }
 };
 </script>
