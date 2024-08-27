@@ -14,7 +14,8 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
+  updateDoc
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -79,4 +80,9 @@ export const getSongs = async () => {
   const output = [];
   songsSnapshot.forEach((doc) => output.push({ ...doc.data(), id: doc.id }));
   return output;
+};
+
+export const updateSong = async (songId, values) => {
+  const songRef = doc(db, 'songs', songId);
+  await updateDoc(songRef, values);
 };

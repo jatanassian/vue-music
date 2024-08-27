@@ -13,7 +13,14 @@
       </button>
     </div>
     <div v-show="showEditForm">
-      <VeeForm :initial-values="song" @submit="editSong">
+      <div
+        v-if="alert.show"
+        class="text-white text-center fond-bold p-4 mb-4"
+        :class="alert.variant"
+      >
+        {{ alert.message }}
+      </div>
+      <VeeForm @submit="editSong">
         <div class="mb-3">
           <label class="inline-block mb-2">Song Title</label>
           <VeeField
@@ -21,6 +28,7 @@
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            :value="song.modified_name"
             rules="required"
           />
           <ErrorMessage class="text-red-600" name="modified_name" />
@@ -31,13 +39,21 @@
             name="genre"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            :value="song.genre"
             placeholder="Enter Genre"
           />
         </div>
-        <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600">Submit</button>
+        <button
+          type="submit"
+          class="py-1.5 px-3 rounded text-white bg-green-600"
+          :disabled="loading"
+        >
+          Submit
+        </button>
         <button
           type="button"
           class="py-1.5 px-3 rounded text-white bg-gray-600"
+          :disabled="loading"
           @click="showEditForm = false"
         >
           Go Back
@@ -48,19 +64,59 @@
 </template>
 
 <script>
+import { updateSong } from '@/utils/firebase';
+
 export default {
   name: 'SongItem',
   props: {
-    song: { type: Object, required: true }
+    song: { type: Object, required: true },
+    songIndex: { type: Number, required: true }
   },
+  //   emits: ['updateSong'],
   data() {
     return {
-      showEditForm: false
+      showEditForm: false,
+      loading: false,
+      alert: {
+        show: false,
+        variant: 'bg-blue-500',
+        message: 'Updating song, please wait.'
+      }
     };
   },
   methods: {
-    editSong(formValues) {
-      console.log(formValues);
+    async editSong(formValues) {
+      this.loading = true;
+      this.alert = {
+        show: true,
+        variant: 'bg-blue-500',
+        message: 'Updating song, please wait.'
+      };
+
+      try {
+        await updateSong(this.song.id, formValues);
+        this.$emit('updateSong', this.songIndex, formValues);
+        this.alert = {
+          show: true,
+          variant: 'bg-green-500',
+          message: 'Song successfully updated.'
+        };
+      } catch (error) {
+        this.alert = {
+          show: true,
+          variant: 'bg-red-500',
+          message: 'Something went wrong.'
+        };
+      } finally {
+        this.loading = false;
+      }
+    }
+  },
+  watch: {
+    showEditForm(show) {
+      if (!show) {
+        this.alert.show = false;
+      }
     }
   }
 };

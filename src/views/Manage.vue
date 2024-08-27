@@ -11,7 +11,13 @@
             <i class="fa fa-compact-disc float-right text-green-400 text-2xl"></i>
           </div>
           <div class="p-6">
-            <SongItem v-for="song in songs" :key="song.id" :song="song" />
+            <SongItem
+              v-for="(song, index) in songs"
+              :key="song.id"
+              :song="song"
+              :song-index="index"
+              @update-song="updateSong"
+            />
           </div>
         </div>
       </div>
@@ -34,6 +40,11 @@ export default {
   },
   async created() {
     this.songs = await getSongs();
+  },
+  methods: {
+    updateSong(index, values) {
+      this.songs[index] = { ...this.songs[index], ...values };
+    }
   }
 };
 </script>
