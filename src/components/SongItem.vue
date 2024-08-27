@@ -13,18 +13,22 @@
       </button>
     </div>
     <div v-show="showEditForm">
-      <form>
+      <VeeForm :initial-values="song" @submit="editSong">
         <div class="mb-3">
           <label class="inline-block mb-2">Song Title</label>
-          <input
+          <VeeField
+            name="modified_name"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            rules="required"
           />
+          <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
         <div class="mb-3">
           <label class="inline-block mb-2">Genre</label>
-          <input
+          <VeeField
+            name="genre"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
@@ -38,7 +42,7 @@
         >
           Go Back
         </button>
-      </form>
+      </VeeForm>
     </div>
   </div>
 </template>
@@ -53,6 +57,11 @@ export default {
     return {
       showEditForm: false
     };
+  },
+  methods: {
+    editSong(formValues) {
+      console.log(formValues);
+    }
   }
 };
 </script>
