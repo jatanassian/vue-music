@@ -2,7 +2,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <Upload />
+        <Upload @add-song="addSong" />
       </div>
       <div class="col-span-2">
         <div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -43,6 +43,9 @@ export default {
     this.songs = await getSongs();
   },
   methods: {
+    addSong(song) {
+      this.songs.push(song);
+    },
     updateSong(index, values) {
       this.songs[index] = { ...this.songs[index], ...values };
     },

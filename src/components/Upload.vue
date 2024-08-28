@@ -78,10 +78,11 @@ export default {
             this.uploads[uploadIndex].textClass = 'text-red-400';
           },
           async () => {
-            await createSong(uploadTask.snapshot);
+            const song = await createSong(uploadTask.snapshot);
             this.uploads[uploadIndex].variant = 'bg-green-400';
             this.uploads[uploadIndex].icon = 'fas fa-check';
             this.uploads[uploadIndex].textClass = 'text-green-400';
+            this.$emit('add-song', song);
           }
         );
       }

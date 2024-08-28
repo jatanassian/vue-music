@@ -22,7 +22,8 @@ import {
   where,
   getDocs,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  getDoc
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -78,7 +79,9 @@ export const createSong = async (snapshot) => {
   };
 
   song.url = await getDownloadURL(snapshot.ref);
-  await addDoc(collection(db, 'songs'), song);
+  const songRef = await addDoc(collection(db, 'songs'), song);
+  const songSnapshot = await getDoc(songRef);
+  return { ...songSnapshot.data(), id: songSnapshot.id };
 };
 
 export const getSongs = async () => {
