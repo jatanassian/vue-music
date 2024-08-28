@@ -2,7 +2,10 @@
   <div class="border border-gray-200 p-3 mb-4 rounded">
     <div v-show="!showEditForm">
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
-      <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
+      <button
+        class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        @click="deleteSong"
+      >
         <i class="fa fa-times"></i>
       </button>
       <button
@@ -64,7 +67,7 @@
 </template>
 
 <script>
-import { updateSong } from '@/utils/firebase';
+import { deleteSong, updateSong } from '@/utils/firebase';
 
 export default {
   name: 'SongItem',
@@ -72,7 +75,7 @@ export default {
     song: { type: Object, required: true },
     songIndex: { type: Number, required: true }
   },
-  //   emits: ['updateSong'],
+  emits: ['updateSong', 'deleteSong'],
   data() {
     return {
       showEditForm: false,
@@ -110,6 +113,10 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    async deleteSong() {
+      await deleteSong(this.song);
+      this.$emit('deleteSong', this.song.id);
     }
   },
   watch: {

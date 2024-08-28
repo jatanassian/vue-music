@@ -5,7 +5,13 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable
+} from 'firebase/storage';
 import {
   getFirestore,
   doc,
@@ -15,7 +21,8 @@ import {
   query,
   where,
   getDocs,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -85,4 +92,9 @@ export const getSongs = async () => {
 export const updateSong = async (songId, values) => {
   const songRef = doc(db, 'songs', songId);
   await updateDoc(songRef, values);
+};
+
+export const deleteSong = async (song) => {
+  await deleteObject(ref(storage, `songs/${song.original_name}`));
+  await deleteDoc(doc(db, 'songs', song.id));
 };

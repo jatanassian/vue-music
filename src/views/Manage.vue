@@ -17,6 +17,7 @@
               :song="song"
               :song-index="index"
               @update-song="updateSong"
+              @delete-song="deleteSong"
             />
           </div>
         </div>
@@ -44,6 +45,9 @@ export default {
   methods: {
     updateSong(index, values) {
       this.songs[index] = { ...this.songs[index], ...values };
+    },
+    deleteSong(id) {
+      this.songs = this.songs.filter((song) => song.id !== id);
     }
   }
 };
