@@ -18,6 +18,7 @@
               :song-index="index"
               @update-song="updateSong"
               @delete-song="deleteSong"
+              @change="unsavedFlag = true"
             />
           </div>
         </div>
@@ -36,11 +37,20 @@ export default {
   components: { Upload, SongItem },
   data() {
     return {
-      songs: []
+      songs: [],
+      unsavedFlag: false
     };
   },
   async created() {
     this.songs = await getSongs();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.unsavedFlag) {
+      next();
+    } else {
+      const leave = confirm('You have unsaved changes. Are you sure you want to leave?');
+      next(leave);
+    }
   },
   methods: {
     addSong(song) {
@@ -48,6 +58,7 @@ export default {
     },
     updateSong(index, values) {
       this.songs[index] = { ...this.songs[index], ...values };
+      this.unsavedFlag = false;
     },
     deleteSong(id) {
       this.songs = this.songs.filter((song) => song.id !== id);

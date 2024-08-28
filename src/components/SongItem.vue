@@ -33,6 +33,7 @@
             placeholder="Enter Song Title"
             :value="song.modified_name"
             rules="required"
+            @input="$emit('change')"
           />
           <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
@@ -44,6 +45,7 @@
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             :value="song.genre"
             placeholder="Enter Genre"
+            @input="$emit('change')"
           />
         </div>
         <button
@@ -75,7 +77,7 @@ export default {
     song: { type: Object, required: true },
     songIndex: { type: Number, required: true }
   },
-  emits: ['updateSong', 'deleteSong'],
+  emits: ['updateSong', 'deleteSong', 'change'],
   data() {
     return {
       showEditForm: false,
