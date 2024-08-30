@@ -84,6 +84,13 @@ export const createSong = async (snapshot) => {
   return { ...songSnapshot.data(), id: songSnapshot.id };
 };
 
+export const getAllSongs = async () => {
+  const songsSnapshot = await getDocs(collection(db, 'songs'));
+  const output = [];
+  songsSnapshot.forEach((doc) => output.push({ ...doc.data(), id: doc.id }));
+  return output;
+};
+
 export const getSongs = async () => {
   const songsQuery = query(collection(db, 'songs'), where('user_id', '==', auth.currentUser.uid));
   const songsSnapshot = await getDocs(songsQuery);
