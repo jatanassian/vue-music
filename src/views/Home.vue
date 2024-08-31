@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getAllSongs } from '@/utils/firebase';
+import { getSongs } from '@/utils/firebase';
 import SongItem from '@/components/home/SongItem.vue';
 
 export default {
@@ -47,11 +47,29 @@ export default {
   components: { SongItem },
   data() {
     return {
-      songs: []
+      songs: [],
+      isLoading: false
     };
   },
   async created() {
-    this.songs = await getAllSongs();
+    this.songs = await getSongs();
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    async handleScroll() {
+      const { scrollTop, offsetHeight } = document.documentElement;
+      const { innerHeight } = window;
+      const bottomOfWindow = Math.round(scrollTop) + innerHeight === offsetHeight;
+      if (bottomOfWindow && !this.isLoading) {
+        this.isLoading = true;
+        const newSongs = await getSongs(this.songs.at(-1).id);
+        this.songs.push(...newSongs);
+        this.isLoading = false;
+      }
+    }
   }
 };
 </script>

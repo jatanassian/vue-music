@@ -23,7 +23,10 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-  getDoc
+  getDoc,
+  limit,
+  startAfter,
+  orderBy
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -84,14 +87,30 @@ export const createSong = async (snapshot) => {
   return { ...songSnapshot.data(), id: songSnapshot.id };
 };
 
-export const getAllSongs = async () => {
-  const songsSnapshot = await getDocs(collection(db, 'songs'));
+export const getSongs = async (lastSongId) => {
+  let songsQuery;
+  // Initial query on page load
+  if (!lastSongId) {
+    songsQuery = query(collection(db, 'songs'), orderBy('modified_name'), limit(10));
+  }
+  // Following queries
+  else {
+    const lastSongSnapshot = await getDoc(doc(collection(db, 'songs'), lastSongId));
+    songsQuery = query(
+      collection(db, 'songs'),
+      orderBy('modified_name'),
+      startAfter(lastSongSnapshot),
+      limit(2)
+    );
+  }
+  const songsSnapshot = await getDocs(songsQuery);
+
   const output = [];
   songsSnapshot.forEach((doc) => output.push({ ...doc.data(), id: doc.id }));
   return output;
 };
 
-export const getSongs = async () => {
+export const getSongsByUser = async () => {
   const songsQuery = query(collection(db, 'songs'), where('user_id', '==', auth.currentUser.uid));
   const songsSnapshot = await getDocs(songsQuery);
   const output = [];
