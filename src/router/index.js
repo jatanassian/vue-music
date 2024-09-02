@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Manage from '@/views/Manage.vue';
+import Song from '@/views/Song.vue';
 import useUserStore from '@/stores/user';
 
 const router = createRouter({
@@ -17,6 +18,12 @@ const router = createRouter({
       name: 'manage',
       meta: { requiresAuth: true },
       component: Manage
+    },
+    {
+      path: '/song/:id',
+      name: 'song',
+      meta: { requiresAuth: true },
+      component: Song
     },
     {
       path: '/about',
