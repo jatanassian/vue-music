@@ -110,7 +110,12 @@ export const getSongs = async (lastSongId) => {
   return output;
 };
 
-export const getSongsByUser = async () => {
+export const getSongById = async (id) => {
+  const songSnapshot = await getDoc(doc(db, 'songs', id));
+  return songSnapshot.exists() ? songSnapshot.data() : null;
+};
+
+export const getSongsOfUser = async () => {
   const songsQuery = query(collection(db, 'songs'), where('user_id', '==', auth.currentUser.uid));
   const songsSnapshot = await getDocs(songsQuery);
   const output = [];

@@ -30,7 +30,7 @@
 <script>
 import Upload from '@/components/Upload.vue';
 import SongItem from '@/components/SongItem.vue';
-import { getSongsByUser } from '@/utils/firebase';
+import { getSongsOfUser } from '@/utils/firebase';
 
 export default {
   name: 'Manage',
@@ -42,7 +42,7 @@ export default {
     };
   },
   async created() {
-    this.songs = await getSongsByUser();
+    this.songs = await getSongsOfUser();
   },
   beforeRouteLeave(to, from, next) {
     if (!this.unsavedFlag) {
