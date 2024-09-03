@@ -65,23 +65,20 @@
   </section>
   <!-- Comments -->
   <ul class="container mx-auto">
-    <li class="p-6 bg-gray-50 border border-gray-200">
+    <li v-for="comment in comments" :key="comment.id" class="p-6 bg-gray-50 border border-gray-200">
       <!-- Comment Author -->
       <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
+        <div class="font-bold">{{ comment.user }}</div>
+        <time>{{ comment.created_at }}</time>
       </div>
 
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
-      </p>
+      <p>{{ comment.text }}</p>
     </li>
   </ul>
 </template>
 
 <script>
-import { createComment, getSongById } from '@/utils/firebase';
+import { createComment, getCommentsOfSong, getSongById } from '@/utils/firebase';
 import { mapState } from 'pinia';
 import useUserStore from '@/stores/user';
 
@@ -90,6 +87,7 @@ export default {
   data() {
     return {
       song: {},
+      comments: [],
       isLoading: false,
       alert: {
         show: false,
@@ -104,6 +102,7 @@ export default {
   async created() {
     const song = await getSongById(this.$route.params.id);
     song ? (this.song = song) : this.$router.push({ name: 'home' });
+    this.comments = await getCommentsOfSong(this.$route.params.id);
   },
   methods: {
     async submitComment({ comment }, { resetForm }) {

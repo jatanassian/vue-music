@@ -43,6 +43,11 @@ export const auth = getAuth();
 export const db = getFirestore();
 export const storage = getStorage();
 
+export const getUserById = async (id) => {
+  const userSnapshot = await getDoc(doc(db, 'users', id));
+  return userSnapshot.data();
+};
+
 export const registerUser = async (userData) => {
   // Create user in Firebase Authentication
   const authUser = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
@@ -117,9 +122,9 @@ export const getSongById = async (id) => {
 
 export const getSongsOfUser = async () => {
   const songsQuery = query(collection(db, 'songs'), where('user_id', '==', auth.currentUser.uid));
-  const songsSnapshot = await getDocs(songsQuery);
+  const songSnapshots = await getDocs(songsQuery);
   const output = [];
-  songsSnapshot.forEach((doc) => output.push({ ...doc.data(), id: doc.id }));
+  songSnapshots.forEach((doc) => output.push({ ...doc.data(), id: doc.id }));
   return output;
 };
 
@@ -131,6 +136,17 @@ export const updateSong = async (songId, values) => {
 export const deleteSong = async (song) => {
   await deleteObject(ref(storage, `songs/${song.original_name}`));
   await deleteDoc(doc(db, 'songs', song.id));
+};
+
+export const getCommentsOfSong = async (songId) => {
+  const commentsQuery = query(collection(db, 'comments'), where('song_id', '==', songId));
+  const commentSnapshots = await getDocs(commentsQuery);
+  const output = [];
+  for (const doc of commentSnapshots.docs) {
+    const user = await getUserById(doc.data().user_id);
+    output.push({ ...doc.data(), id: doc.id, user: user.name });
+  }
+  return output;
 };
 
 export const createComment = async (songId, text) => {
