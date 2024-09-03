@@ -54,7 +54,7 @@ export const registerUser = async (userData) => {
     email: userData.email,
     age: userData.age,
     country: userData.country,
-    createdAt: new Date()
+    created_at: new Date()
   });
 };
 
@@ -131,4 +131,19 @@ export const updateSong = async (songId, values) => {
 export const deleteSong = async (song) => {
   await deleteObject(ref(storage, `songs/${song.original_name}`));
   await deleteDoc(doc(db, 'songs', song.id));
+};
+
+export const createComment = async (songId, text) => {
+  const comment = {
+    user_id: auth.currentUser.uid,
+    song_id: songId,
+    text,
+    created_at: new Date()
+  };
+
+  console.log(comment);
+
+  const commentRef = await addDoc(collection(db, 'comments'), comment);
+  const commentSnapshot = await getDoc(commentRef);
+  return { ...commentSnapshot.data(), id: commentSnapshot.id };
 };

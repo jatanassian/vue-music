@@ -29,15 +29,30 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <form>
-          <textarea
+        <div
+          v-if="alert.show"
+          class="text-white text-center fond-bold p-4 mb-4"
+          :class="alert.variant"
+        >
+          {{ alert.message }}
+        </div>
+        <VeeForm v-if="isLoggedIn" @submit="submitComment">
+          <VeeField
+            as="textarea"
+            name="comment"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
             placeholder="Your comment here..."
-          ></textarea>
-          <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600 block">
+            rules="required|min:3"
+          ></VeeField>
+          <ErrorMessage class="text-red-600" name="comment" />
+          <button
+            type="submit"
+            class="py-1.5 px-3 rounded text-white bg-green-600 block"
+            :disabled="isLoading"
+          >
             Submit
           </button>
-        </form>
+        </VeeForm>
         <!-- Sort Comments -->
         <select
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
@@ -66,18 +81,50 @@
 </template>
 
 <script>
-import { getSongById } from '@/utils/firebase';
+import { createComment, getSongById } from '@/utils/firebase';
+import { mapState } from 'pinia';
+import useUserStore from '@/stores/user';
 
 export default {
   name: 'Song',
   data() {
     return {
-      song: {}
+      song: {},
+      isLoading: false,
+      alert: {
+        show: false,
+        variant: 'bg-blue-500',
+        message: 'Submitting your comment, please wait.'
+      }
     };
+  },
+  computed: {
+    ...mapState(useUserStore, ['isLoggedIn'])
   },
   async created() {
     const song = await getSongById(this.$route.params.id);
     song ? (this.song = song) : this.$router.push({ name: 'home' });
+  },
+  methods: {
+    async submitComment({ comment }, { resetForm }) {
+      this.isLoading = true;
+      this.alert.show = true;
+      this.alert.variant = 'bg-blue-500';
+      this.alert.message = 'Submitting your comment, please wait.';
+      try {
+        await createComment(this.$route.params.id, comment);
+        this.alert.show = true;
+        this.alert.variant = 'bg-green-500';
+        this.alert.message = 'Comment posted.';
+        resetForm();
+      } catch (error) {
+        this.alert.show = true;
+        this.alert.variant = 'bg-red-500';
+        this.alert.message = 'Unable to post your comment, try again later.';
+      } finally {
+        this.isLoading = false;
+      }
+    }
   }
 };
 </script>
