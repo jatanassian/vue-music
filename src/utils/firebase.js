@@ -59,7 +59,7 @@ export const registerUser = async (userData) => {
     email: userData.email,
     age: userData.age,
     country: userData.country,
-    created_at: new Date()
+    created_at: new Date().toString()
   });
 };
 
@@ -154,12 +154,12 @@ export const createComment = async (songId, text) => {
     user_id: auth.currentUser.uid,
     song_id: songId,
     text,
-    created_at: new Date()
+    created_at: new Date().toString()
   };
 
   console.log(comment);
 
   const commentRef = await addDoc(collection(db, 'comments'), comment);
   const commentSnapshot = await getDoc(commentRef);
-  return { ...commentSnapshot.data(), id: commentSnapshot.id };
+  return { ...commentSnapshot.data(), id: commentSnapshot.id, user: auth.currentUser.name };
 };

@@ -25,7 +25,7 @@
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
-        <span class="card-title">Comments ({{ song.comments_count }})</span>
+        <span class="card-title">Comments ({{ sortedComments.length }})</span>
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
@@ -55,17 +55,22 @@
         </VeeForm>
         <!-- Sort Comments -->
         <select
+          v-model="sorting"
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         >
-          <option value="1">Latest</option>
-          <option value="2">Oldest</option>
+          <option value="newest">Latest</option>
+          <option value="oldest">Oldest</option>
         </select>
       </div>
     </div>
   </section>
   <!-- Comments -->
   <ul class="container mx-auto">
-    <li v-for="comment in comments" :key="comment.id" class="p-6 bg-gray-50 border border-gray-200">
+    <li
+      v-for="comment in sortedComments"
+      :key="comment.id"
+      class="p-6 bg-gray-50 border border-gray-200"
+    >
       <!-- Comment Author -->
       <div class="mb-5">
         <div class="font-bold">{{ comment.user }}</div>
@@ -89,6 +94,7 @@ export default {
       song: {},
       comments: [],
       isLoading: false,
+      sorting: 'newest',
       alert: {
         show: false,
         variant: 'bg-blue-500',
@@ -97,7 +103,14 @@ export default {
     };
   },
   computed: {
-    ...mapState(useUserStore, ['isLoggedIn'])
+    ...mapState(useUserStore, ['isLoggedIn']),
+    sortedComments() {
+      return this.comments.toSorted((a, b) =>
+        this.sorting === 'newest'
+          ? new Date(b.created_at) - new Date(a.created_at)
+          : new Date(a.created_at) - new Date(b.created_at)
+      );
+    }
   },
   async created() {
     const song = await getSongById(this.$route.params.id);
@@ -111,7 +124,8 @@ export default {
       this.alert.variant = 'bg-blue-500';
       this.alert.message = 'Submitting your comment, please wait.';
       try {
-        await createComment(this.$route.params.id, comment);
+        const newComment = await createComment(this.$route.params.id, comment);
+        this.comments.push(newComment);
         this.alert.show = true;
         this.alert.variant = 'bg-green-500';
         this.alert.message = 'Comment posted.';
