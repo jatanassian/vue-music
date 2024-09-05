@@ -55,10 +55,10 @@
         </VeeForm>
         <!-- Sort Comments -->
         <select
-          v-model="sorting"
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          @change="updateSort"
         >
-          <option value="newest">Latest</option>
+          <option value="latest">Latest</option>
           <option value="oldest">Oldest</option>
         </select>
       </div>
@@ -94,7 +94,6 @@ export default {
       song: {},
       comments: [],
       isLoading: false,
-      sorting: 'newest',
       alert: {
         show: false,
         variant: 'bg-blue-500',
@@ -106,9 +105,9 @@ export default {
     ...mapState(useUserStore, ['isLoggedIn']),
     sortedComments() {
       return this.comments.toSorted((a, b) =>
-        this.sorting === 'newest'
-          ? new Date(b.created_at) - new Date(a.created_at)
-          : new Date(a.created_at) - new Date(b.created_at)
+        this.$route.query.sort === 'oldest'
+          ? new Date(a.created_at) - new Date(b.created_at)
+          : new Date(b.created_at) - new Date(a.created_at)
       );
     }
   },
@@ -137,6 +136,11 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    updateSort(event) {
+      this.$router.push({
+        query: { sort: event.target.value }
+      });
     }
   }
 };
