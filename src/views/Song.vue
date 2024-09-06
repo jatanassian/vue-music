@@ -10,6 +10,7 @@
       <button
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+        @click="setSong(song)"
       >
         <i class="fas fa-play"></i>
       </button>
@@ -85,8 +86,9 @@
 
 <script>
 import { createComment, getCommentsOfSong, getSongById } from '@/utils/firebase';
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import useUserStore from '@/stores/user';
+import useSongStore from '@/stores/song';
 
 export default {
   name: 'Song',
@@ -118,6 +120,7 @@ export default {
     this.comments = await getCommentsOfSong(this.$route.params.id);
   },
   methods: {
+    ...mapActions(useSongStore, ['setSong']),
     async submitComment({ comment }, { resetForm }) {
       this.isLoading = true;
       this.alert.show = true;
