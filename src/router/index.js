@@ -22,7 +22,6 @@ const router = createRouter({
     {
       path: '/song/:id',
       name: 'song',
-      meta: { requiresAuth: true },
       component: Song
     },
     {
