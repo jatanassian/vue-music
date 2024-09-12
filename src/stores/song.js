@@ -12,6 +12,10 @@ export default defineStore('song', {
   }),
   actions: {
     setSong(song) {
+      if (this.sound instanceof Howl) {
+        this.sound.unload();
+      }
+
       this.currentSong = song;
 
       this.sound = new Howl({
