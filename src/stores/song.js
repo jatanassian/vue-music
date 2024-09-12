@@ -7,7 +7,8 @@ export default defineStore('song', {
     currentSong: {},
     sound: {},
     time: '00.00',
-    duration: '00.00'
+    duration: '00.00',
+    songProgress: 0
   }),
   actions: {
     setSong(song) {
@@ -29,6 +30,8 @@ export default defineStore('song', {
     setProgress() {
       this.time = formatTime(this.sound.seek());
       this.duration = formatTime(this.sound.duration());
+
+      this.songProgress = `${(this.sound.seek() / this.sound.duration()) * 100}%`;
 
       if (this.sound.playing()) {
         requestAnimationFrame(this.setProgress);
