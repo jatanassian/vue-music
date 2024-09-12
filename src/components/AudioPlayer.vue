@@ -17,14 +17,14 @@
         <!-- Player Ball -->
         <span
           class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
-          :style="{ left: songProgress }"
+          :style="{ left: songProgress + '%' }"
         >
           <i class="fas fa-circle"></i>
         </span>
         <!-- Player Progress Bar-->
         <span
           class="block h-2 rounded bg-gradient-to-r from-green-500 to-green-400"
-          :style="{ width: songProgress }"
+          :style="{ width: songProgress + '%' }"
         ></span>
       </div>
       <!-- Duration -->
