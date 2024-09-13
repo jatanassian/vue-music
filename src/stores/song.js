@@ -40,6 +40,24 @@ export default defineStore('song', {
       if (this.sound.playing()) {
         requestAnimationFrame(this.setProgress);
       }
+    },
+    updateProgress(event) {
+      if (!this.sound.playing) {
+        return;
+      }
+
+      const { x, width } = event.currentTarget.getBoundingClientRect();
+      // event.clientX is the X position of the click in the document
+      // x is the distance between the left side of the player element and the left side of the document
+      // We can calculate clickX, whick is the X position of the click relative to the player element
+      const clickX = event.clientX - x;
+      // Then we can calculate the amount of seconds that X position represents on the player
+      const percentage = clickX / width;
+      const seconds = this.sound.duration() * percentage;
+
+      // Update the position
+      this.sound.seek(seconds);
+      this.sound.once('seek', this.setProgress);
     }
   },
   getters: {

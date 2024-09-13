@@ -13,7 +13,7 @@
       <!-- Current Position -->
       <div class="player-currenttime">{{ time }}</div>
       <!-- Scrub Container  -->
-      <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer">
+      <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer" @click="updateProgress">
         <!-- Player Ball -->
         <span
           class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
@@ -43,7 +43,7 @@ export default {
     ...mapState(useSongStore, ['isPlaying', 'time', 'duration', 'songProgress', 'currentSong'])
   },
   methods: {
-    ...mapActions(useSongStore, ['toggleAudio'])
+    ...mapActions(useSongStore, ['toggleAudio', 'updateProgress'])
   }
 };
 </script>
