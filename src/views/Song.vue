@@ -67,7 +67,7 @@
     </div>
   </section>
   <!-- Comments -->
-  <ul class="container mx-auto">
+  <ul id="comments" class="container mx-auto">
     <li
       v-for="comment in sortedComments"
       :key="comment.id"
