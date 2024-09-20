@@ -10,9 +10,11 @@
       <button
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
-        @click="setSong(song)"
+        @click="$route.params.id === currentSongId ? toggleAudio() : setSong(song)"
       >
-        <i class="fas fa-play"></i>
+        <i
+          :class="['fas', $route.params.id === currentSongId && isPlaying ? 'fa-pause' : 'fa-play']"
+        ></i>
       </button>
       <div class="z-50 text-left ml-8">
         <!-- Song Info -->
@@ -106,6 +108,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ['isLoggedIn']),
+    ...mapState(useSongStore, ['isPlaying', 'currentSongId']),
     sortedComments() {
       return this.comments.toSorted((a, b) =>
         this.$route.query.sort === 'oldest'
@@ -120,7 +123,7 @@ export default {
     this.comments = await getCommentsOfSong(this.$route.params.id);
   },
   methods: {
-    ...mapActions(useSongStore, ['setSong']),
+    ...mapActions(useSongStore, ['setSong', 'toggleAudio']),
     async submitComment({ comment }, { resetForm }) {
       this.isLoading = true;
       this.alert.show = true;

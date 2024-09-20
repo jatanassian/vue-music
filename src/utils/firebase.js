@@ -117,7 +117,7 @@ export const getSongs = async (lastSongId) => {
 
 export const getSongById = async (id) => {
   const songSnapshot = await getDoc(doc(db, 'songs', id));
-  return songSnapshot.exists() ? songSnapshot.data() : null;
+  return songSnapshot.exists() ? { ...songSnapshot.data(), id } : null;
 };
 
 export const getSongsOfUser = async () => {

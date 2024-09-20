@@ -5,44 +5,44 @@ import { formatTime } from '@/utils/helpers';
 export default defineStore('song', {
   state: () => ({
     currentSong: {},
-    sound: {},
+    audio: {},
     time: '00.00',
     duration: '00.00',
     songProgress: 0
   }),
   actions: {
     setSong(song) {
-      if (this.sound instanceof Howl) {
-        this.sound.unload();
+      if (this.audio instanceof Howl) {
+        this.audio.unload();
       }
 
       this.currentSong = song;
 
-      this.sound = new Howl({
+      this.audio = new Howl({
         src: song.url,
         html5: true,
         onplay: () => requestAnimationFrame(this.setProgress)
       });
 
-      this.sound.play();
+      this.audio.play();
     },
     toggleAudio() {
-      if (this.sound.playing) {
-        this.sound.playing() ? this.sound.pause() : this.sound.play();
+      if (this.audio.playing) {
+        this.audio.playing() ? this.audio.pause() : this.audio.play();
       }
     },
     setProgress() {
-      this.time = formatTime(this.sound.seek());
-      this.duration = formatTime(this.sound.duration());
+      this.time = formatTime(this.audio.seek());
+      this.duration = formatTime(this.audio.duration());
 
-      this.songProgress = (this.sound.seek() / this.sound.duration()) * 100;
+      this.songProgress = (this.audio.seek() / this.audio.duration()) * 100;
 
-      if (this.sound.playing()) {
+      if (this.audio.playing()) {
         requestAnimationFrame(this.setProgress);
       }
     },
     updateProgress(event) {
-      if (!this.sound.playing) {
+      if (!this.audio.playing) {
         return;
       }
 
@@ -53,17 +53,20 @@ export default defineStore('song', {
       const clickX = event.clientX - x;
       // Then we can calculate the amount of seconds that X position represents on the player
       const percentage = clickX / width;
-      const seconds = this.sound.duration() * percentage;
+      const seconds = this.audio.duration() * percentage;
 
       // Update the position
-      this.sound.seek(seconds);
-      this.sound.once('seek', this.setProgress);
+      this.audio.seek(seconds);
+      this.audio.once('seek', this.setProgress);
     }
   },
   getters: {
+    currentSongId: (state) => {
+      return state.currentSong.id;
+    },
     isPlaying: (state) => {
-      if (state.sound.playing) {
-        return state.sound.playing();
+      if (state.audio.playing) {
+        return state.audio.playing();
       }
       return false;
     }
