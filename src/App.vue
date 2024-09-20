@@ -1,7 +1,11 @@
 <template>
   <Navbar />
 
-  <router-view />
+  <RouterView v-slot="{ Component }">
+    <Transition name="fade" mode="out-in">
+      <component :is="Component"></component>
+    </Transition>
+  </RouterView>
 
   <AudioPlayer />
 
@@ -29,3 +33,18 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: all 0.5s linear;
+}
+
+.fade-leave-to {
+  transition: all 0.5s linear;
+  opacity: 0;
+}
+</style>
