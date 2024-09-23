@@ -1,1 +1,13 @@
-{}
+{
+  "home": {
+    "header": "Écoutez des musiques géniales !"
+  },
+  "song": {
+    "comments": {
+      "header": "Pas de commentaires | 1 commentaire | {count} commentaires"
+    }
+  },
+  "manage": {
+    "header": "Mes Musiques"
+  }
+}
