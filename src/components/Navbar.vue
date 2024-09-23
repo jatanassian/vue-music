@@ -28,6 +28,12 @@
             </li>
           </template>
         </ul>
+        <!-- Language Change -->
+        <ul class="ml-auto">
+          <li>
+            <a href="#" class="px-2 text-white" @click="changeLocale">{{ currentLocale }}</a>
+          </li>
+        </ul>
       </div>
     </nav>
   </header>
@@ -42,7 +48,10 @@ export default {
   name: 'Navbar',
   computed: {
     ...mapStores(useModalStore),
-    ...mapState(useUserStore, ['isLoggedIn'])
+    ...mapState(useUserStore, ['isLoggedIn']),
+    currentLocale() {
+      return this.$i18n.locale === 'fr' ? 'French' : 'English';
+    }
   },
   methods: {
     ...mapActions(useUserStore, { logUserOut: 'logout' }),
@@ -52,6 +61,9 @@ export default {
     async logout() {
       await this.logUserOut();
       this.$route.meta.requiresAuth && this.$router.push({ name: 'home' });
+    },
+    changeLocale() {
+      this.$i18n.locale = this.$i18n.locale === 'fr' ? 'en' : 'fr';
     }
   }
 };
