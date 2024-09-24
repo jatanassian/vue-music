@@ -1,7 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/views/Home.vue';
-import Manage from '@/views/Manage.vue';
-import Song from '@/views/Song.vue';
 import useUserStore from '@/stores/user';
 
 const router = createRouter({
@@ -11,18 +8,18 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: () => import('@/views/Home.vue')
     },
     {
       path: '/manage',
       name: 'manage',
       meta: { requiresAuth: true },
-      component: Manage
+      component: () => import('@/views/Manage.vue')
     },
     {
       path: '/song/:id',
       name: 'song',
-      component: Song
+      component: () => import('@/views/Song.vue')
     },
     {
       path: '/about',
