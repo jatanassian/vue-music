@@ -157,8 +157,6 @@ export const createComment = async (songId, text) => {
     created_at: new Date().toString()
   };
 
-  console.log(comment);
-
   const commentRef = await addDoc(collection(db, 'comments'), comment);
   const commentSnapshot = await getDoc(commentRef);
   return { ...commentSnapshot.data(), id: commentSnapshot.id, user: auth.currentUser.name };

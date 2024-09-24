@@ -80,12 +80,12 @@ export default {
         await this.authenticate(formValues);
         this.alert.variant = 'bg-green-500';
         this.alert.message = 'Logged in successfully.';
+        this.isModalOpen = false;
       } catch {
         this.alert.variant = 'bg-red-500';
         this.alert.message = 'Unable to login, please try again.';
       } finally {
         this.isLoading = false;
-        this.isModalOpen = false;
       }
     }
   }

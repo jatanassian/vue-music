@@ -33,7 +33,7 @@
         <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
           <!-- Comment Count -->
           <span class="card-title">{{
-            $tc('song.comments.header', sortedComments.length, { count: sortedComments.length })
+            $tc('song.comments.header', song.comments_count, { count: song.comments_count })
           }}</span>
           <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
         </div>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { createComment, getCommentsOfSong, getSongById } from '@/utils/firebase';
+import { createComment, getCommentsOfSong, getSongById, updateSong } from '@/utils/firebase';
 import { mapState, mapActions } from 'pinia';
 import useUserStore from '@/stores/user';
 import useSongStore from '@/stores/song';
@@ -139,6 +139,8 @@ export default {
       try {
         const newComment = await createComment(this.$route.params.id, comment);
         this.comments.push(newComment);
+        await updateSong(this.$route.params.id, { comments_count: this.song.comments_count + 1 });
+        this.song.comments_count++;
         this.alert.show = true;
         this.alert.variant = 'bg-green-500';
         this.alert.message = 'Comment posted.';
