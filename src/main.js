@@ -6,9 +6,13 @@ import { createPinia } from 'pinia';
 import { auth } from '@/utils/firebase';
 import VeeValidatePlugin from '@/utils/validation';
 import i18n from './utils/i18n';
+import progressBar from './utils/progress-bar';
+import 'nprogress/nprogress.css';
 
 import App from './App.vue';
 import router from './router';
+
+progressBar(router);
 
 let app;
 
