@@ -33,7 +33,7 @@
         <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
           <!-- Comment Count -->
           <span class="card-title">{{
-            $tc('song.comments.header', song.comments_count, { count: song.comments_count })
+            $t('song.comments.header', song.comments_count, { count: song.comments_count })
           }}</span>
           <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
         </div>
@@ -124,10 +124,13 @@ export default {
       );
     }
   },
-  async created() {
-    const song = await getSongById(this.$route.params.id);
-    song ? (this.song = song) : this.$router.push({ name: 'home' });
-    this.comments = await getCommentsOfSong(this.$route.params.id);
+  async beforeRouteEnter(to, from, next) {
+    const song = await getSongById(to.params.id);
+
+    next(async (vm) => {
+      song ? (vm.song = song) : vm.$router.push({ name: 'home' });
+      vm.comments = await getCommentsOfSong(to.params.id);
+    });
   },
   methods: {
     ...mapActions(useSongStore, ['setSong', 'toggleAudio']),
