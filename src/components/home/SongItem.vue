@@ -1,6 +1,7 @@
 <template>
   <li
     class="flex justify-between items-center p-3 pl-6 cursor-pointer transition duration-300 hover:bg-gray-50"
+    :data-testid="`song-id-${song.id}`"
   >
     <div>
       <RouterLink
@@ -28,6 +29,8 @@
 </template>
 
 <script>
+import song from '@/stores/song';
+
 export default {
   name: 'SongItem',
   props: { song: { type: Object, required: true } }
