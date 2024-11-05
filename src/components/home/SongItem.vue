@@ -7,6 +7,7 @@
       <RouterLink
         :to="{ name: 'song', params: { id: song.id } }"
         class="font-bold block text-gray-600"
+        data-cy="song-name"
       >
         {{ song.modified_name }}
       </RouterLink>
@@ -29,8 +30,6 @@
 </template>
 
 <script>
-import song from '@/stores/song';
-
 export default {
   name: 'SongItem',
   props: { song: { type: Object, required: true } }

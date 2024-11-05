@@ -7,7 +7,7 @@
     </div>
     <div class="flex flex-nowrap gap-4 items-center">
       <!-- Play/Pause Button -->
-      <button type="button" @click="toggleAudio">
+      <button type="button" data-cy="player-button" @click="toggleAudio">
         <i class="fa text-gray-500 text-xl" :class="isPlaying ? 'fa-pause' : 'fa-play'"></i>
       </button>
       <!-- Current Position -->

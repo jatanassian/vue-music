@@ -11,6 +11,7 @@
         <button
           type="button"
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+          data-cy="play-button"
           @click="$route.params.id === currentSongId ? toggleAudio() : setSong(song)"
         >
           <i
