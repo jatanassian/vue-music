@@ -1,13 +1,65 @@
 {
   "home": {
-    "header": "Écoutez des musiques géniales !"
+    "header": "Écoutez des musiques géniales !",
+    "description": "Télécharge tes musiques, découvre-en des nouvelles, et discute de ta passion!",
+    "song_list_header": "Musiques"
+  },
+  "navbar": {
+    "about": "À propos",
+    "manage": "Gérer",
+    "logout": "Se déconnecter",
+    "login_register": "Se connecter / S'enregistrer"
+  },
+  "auth": {
+    "title": "Votre Compte",
+    "login": {
+      "title": "Se connecter",
+      "email": "E-mail",
+      "email_placeholder": "Entrez votre e-mail",
+      "password": "Mot de passe",
+      "password_placeholder": "Votre mot de passe"
+    },
+    "register": {
+      "title": "S'enregistrer",
+      "name": "Nom",
+      "name_placeholder": "Votre nom",
+      "email": "E-mail",
+      "email_placeholder": "Votre e-mail",
+      "age": "Âge",
+      "password": "Mot de passe",
+      "password_placeholder": "Votre mot de passe",
+      "confirm": "Confirmation du mot de passe",
+      "country": "Pays",
+      "country_select": "Sélectionnez votre pays",
+      "tos": "J'accepte les conditions de service"
+    }
   },
   "song": {
     "comments": {
-      "header": "Pas de commentaires | 1 commentaire | {count} commentaires"
+      "header": "Pas de commentaires | 1 commentaire | {count} commentaires",
+      "comment_placeholder": "Tapez votre commentaire ici...",
+      "latest": "Plus récents",
+      "oldest": "Plus anciens"
     }
   },
   "manage": {
-    "header": "Mes Musiques"
+    "header": "Mes Musiques",
+    "upload": {
+      "header": "Télécharger",
+      "description": "Déposez vos fichiers ici"
+    },
+    "song_form": {
+      "title": "Titre",
+      "title_placeholder": "Tapez le titre de la musique",
+      "genre": "Genre",
+      "genre_placeholder": "Tapez le genre de la musique",
+      "back_btn": "Annuler"
+    }
+  },
+  "player": {
+    "by": "par"
+  },
+  "shared": {
+    "submit": "Soumettre"
   }
 }

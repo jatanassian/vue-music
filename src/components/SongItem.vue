@@ -25,12 +25,12 @@
       </div>
       <VeeForm @submit="editSong">
         <div class="mb-3">
-          <label class="inline-block mb-2">Song Title</label>
+          <label class="inline-block mb-2">{{ $t('manage.song_form.title') }}</label>
           <VeeField
             name="modified_name"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Enter Song Title"
+            :placeholder="$t('manage.song_form.title_placeholder')"
             :value="song.modified_name"
             rules="required"
             @input="$emit('change')"
@@ -38,13 +38,13 @@
           <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
         <div class="mb-3">
-          <label class="inline-block mb-2">Genre</label>
+          <label class="inline-block mb-2">{{ $t('manage.song_form.genre') }}</label>
           <VeeField
             name="genre"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             :value="song.genre"
-            placeholder="Enter Genre"
+            :placeholder="$t('manage.song_form.genre_placeholder')"
             @input="$emit('change')"
           />
         </div>
@@ -53,7 +53,7 @@
           class="py-1.5 px-3 rounded text-white bg-green-600"
           :disabled="loading"
         >
-          Submit
+          {{ $t('shared.submit') }}
         </button>
         <button
           type="button"
@@ -61,7 +61,7 @@
           :disabled="loading"
           @click="showEditForm = false"
         >
-          Go Back
+          {{ $t('manage.song_form.back_btn') }}
         </button>
       </VeeForm>
     </div>

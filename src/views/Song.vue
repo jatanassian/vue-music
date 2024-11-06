@@ -51,7 +51,7 @@
               as="textarea"
               name="comment"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
-              placeholder="Your comment here..."
+              :placeholder="$t('song.comments.comment_placeholder')"
               rules="required|min:3"
             ></VeeField>
             <ErrorMessage class="text-red-600" name="comment" />
@@ -60,7 +60,7 @@
               class="py-1.5 px-3 rounded text-white bg-green-600 block"
               :disabled="isLoading"
             >
-              Submit
+              {{ $t('shared.submit') }}
             </button>
           </VeeForm>
           <!-- Sort Comments -->
@@ -69,8 +69,8 @@
             class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             @change="updateSort"
           >
-            <option value="latest">Latest</option>
-            <option value="oldest">Oldest</option>
+            <option value="latest">{{ $t('song.comments.latest') }}</option>
+            <option value="oldest">{{ $t('song.comments.oldest') }}</option>
           </select>
         </div>
       </div>

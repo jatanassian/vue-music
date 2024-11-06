@@ -1,13 +1,65 @@
 {
   "home": {
-    "header": "Listen to Great Music!"
+    "header": "Listen to Great Music!",
+    "description": "Upload your songs, discover new music, and discuss about your passion!",
+    "song_list_header": "Songs"
+  },
+  "navbar": {
+    "about": "About",
+    "manage": "Manage",
+    "logout": "Logout",
+    "login_register": "Login / Register"
+  },
+  "auth": {
+    "title": "Your Account",
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "email_placeholder": "Enter Email",
+      "password": "Password",
+      "password_placeholder": "Your password"
+    },
+    "register": {
+      "title": "Register",
+      "name": "Name",
+      "name_placeholder": "Enter Name",
+      "email": "Email",
+      "email_placeholder": "Enter Email",
+      "age": "Age",
+      "password": "Password",
+      "password_placeholder": "Enter Password",
+      "confirm": "Confirm Password",
+      "country": "Country",
+      "country_select": "Select your country",
+      "tos": "Accept terms of service"
+    }
   },
   "song": {
     "comments": {
-      "header": "No comments | 1 comment | {count} comments"
+      "header": "No comments | 1 comment | {count} comments",
+      "comment_placeholder": "Your comment here...",
+      "latest": "Latest",
+      "oldest": "Oldest"
     }
   },
   "manage": {
-    "header": "My Songs"
+    "header": "My Songs",
+    "upload": {
+      "header": "Upload",
+      "description": "Drop your files here"
+    },
+    "song_form": {
+      "title": "Song Title",
+      "title_placeholder": "Enter Song Title",
+      "genre": "Genre",
+      "genre_placeholder": "Enter Genre",
+      "back_btn": "Back"
+    }
+  },
+  "player": {
+    "by": "by"
+  },
+  "shared": {
+    "submit": "Submit"
   }
 }
