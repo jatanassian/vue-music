@@ -9,6 +9,7 @@ exports[`Snapshots SongItem.vue > Renders correctly 1`] = `
     <router-link-stub
       class="font-bold block text-gray-600"
       custom="false"
+      data-cy="song-name"
       to="[object Object]"
     />
     <span
